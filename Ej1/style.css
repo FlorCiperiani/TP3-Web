@@ -1,0 +1,668 @@
+/* =========================================================
+   Ejercicio 1 - Adivina el número
+   Tailwind se ocupa del layout y los tamaños.
+   Acá van los colores, los bordes gruesos y las animaciones.
+   ========================================================= */
+
+:root {
+  --tinta: #0a3a4a;      /* azul profundo: bordes y textos */
+  --arena: #fbe9b0;      /* amarillo arena */
+  --coral: #cf4f14;      /* botón principal */
+  --rosa: #ffc4d3;       /* pista "muy alto" */
+  --mar-1: #19b9b4;      /* turquesa de la tarjeta */
+  --mar-2: #0b7f86;
+}
+
+body {
+  font-family: 'Nunito', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  color: var(--tinta);
+  background: linear-gradient(180deg, #2e1b52 0%, #6930a3 40%, #b57eed 75%, #e9d3ff 100%);
+  background-attachment: fixed;
+}
+
+.fuente-titulo {
+  font-family: 'Fredoka', 'Nunito', system-ui, sans-serif;
+  font-weight: 600;
+}
+
+.titulo {
+  color: #ffe28a;
+  font-weight: 700;
+  text-shadow:
+    0 0 8px rgba(0, 0, 0, 0.55),
+    2px 2px 0 #2a1147,
+    -2px 2px 0 #2a1147,
+    2px -2px 0 #2a1147,
+    -2px -2px 0 #2a1147,
+    0 4px 12px rgba(0, 0, 0, 0.5);
+}
+
+/* Para mostrar / ocultar vistas desde JS */
+.oculto { display: none !important; }
+
+/* ---------- Fondo: destellos mágicos ---------- */
+.animaciones-fondo {
+  position: fixed;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 0;
+}
+.animaciones-fondo span {
+  position: absolute;
+  bottom: -40px;
+  left: var(--x);
+  width: var(--t);
+  height: var(--t);
+  background: linear-gradient(180deg, #fff6d8 0%, #ffd76a 45%, #f2a900 100%);
+  clip-path: polygon(
+    50% 0%, 61% 39%, 100% 50%, 61% 61%,
+    50% 100%, 39% 61%, 0% 50%, 39% 39%
+  );
+  filter: drop-shadow(0 0 3px #fff2c2) drop-shadow(0 0 8px #ffb703) drop-shadow(0 0 16px #f2a900);
+  opacity: 0;
+  animation: destello var(--d) ease-in-out infinite;
+  animation-delay: var(--r);
+}
+
+.animaciones-fondo span:nth-child(3n) {
+  width: calc(var(--t) * 0.35);
+  height: calc(var(--t) * 0.35);
+  clip-path: circle(50% at 50% 50%);
+  filter: drop-shadow(0 0 2px #fff2c2) drop-shadow(0 0 5px #ffb703);
+}
+@keyframes destello {
+  0%   { transform: translateY(0) scale(0.3) rotate(0deg);   opacity: 0; }
+  12%  { opacity: 1; }
+  50%  { transform: translateY(-55vh) scale(1) rotate(180deg); opacity: 0.9; }
+  80%  { opacity: 0.3; }
+  100% { transform: translateY(-110vh) scale(0.4) rotate(360deg); opacity: 0; }
+}
+
+/* ---------- Tarjeta del juego ---------- */
+.tarjeta {
+  background: linear-gradient(165deg, var(--mar-1) 0%, var(--mar-2) 100%);
+  color: #f2fffd;
+  border: 4px solid var(--tinta);
+  border-radius: 2rem;
+  box-shadow: 10px 10px 0 var(--tinta), 0 26px 40px rgba(10, 58, 74, 0.25);
+}
+.tarjeta.ganada {
+  animation: latido 1.1s ease-in-out 3;
+}
+@keyframes latido {
+  50% { transform: scale(1.03); }
+}
+
+/* ---------- Botones ---------- */
+.btn {
+  font-family: 'Fredoka', 'Nunito', sans-serif;
+  font-weight: 600;
+  font-size: 1.25rem;
+  padding: 0.7rem 1.4rem;
+  border: 3px solid var(--tinta);
+  border-radius: 1rem;
+  cursor: pointer;
+  box-shadow: 0 5px 0 var(--tinta);
+  transition: transform 0.08s, box-shadow 0.08s;
+}
+.btn:hover  { transform: translateY(-1px); }
+.btn:active { transform: translateY(4px); box-shadow: 0 1px 0 var(--tinta); }
+
+.btn-principal  { background: var(--coral); color: #fff; }
+.btn-secundario { background: var(--arena); color: var(--tinta); font-size: 1.05rem; padding: 0.5rem 1.2rem; }
+
+/* Foco visible para quien navega con teclado */
+:focus-visible { outline: 4px solid var(--tinta); outline-offset: 3px; }
+.tarjeta :focus-visible { outline-color: var(--arena); }
+
+/* ---------- Campo de texto ---------- */
+.entrada {
+  font-family: 'Fredoka', 'Nunito', sans-serif;
+  font-size: 1.75rem;
+  text-align: center;
+  color: var(--tinta);
+  background: #fff;
+  border: 3px solid var(--tinta);
+  border-radius: 1rem;
+  padding: 0.6rem 1rem;
+  box-shadow: inset 0 3px 0 rgba(10, 58, 74, 0.12);
+  appearance: textfield;
+  -moz-appearance: textfield;
+}
+.entrada::placeholder { color: #587c86; font-size: 1.1rem; }
+.entrada::-webkit-outer-spin-button,
+.entrada::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+
+.sacudir { animation: sacudir 0.4s; }
+@keyframes sacudir {
+  20%, 60% { transform: translateX(-8px); }
+  40%, 80% { transform: translateX(8px); }
+}
+
+/* ---------- Contador de intentos ---------- */
+.contador {
+  display: inline-block;
+  font-family: 'Fredoka', 'Nunito', sans-serif;
+  font-weight: 700;
+  font-size: 3.5rem;
+  line-height: 1;
+  color: var(--arena);
+  font-variant-numeric: tabular-nums;
+}
+.contador.pop { animation: pop 0.3s ease-out; }
+@keyframes pop {
+  40% { transform: scale(1.35); }
+}
+
+/* ---------- Barra del rango posible ---------- */
+.rango-pista {
+  position: relative;
+  height: 14px;
+  overflow: hidden;
+  border: 2px solid var(--tinta);
+  border-radius: 999px;
+  background: rgba(10, 58, 74, 0.45);
+}
+.rango-relleno {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  min-width: 6px;
+  border-radius: 999px;
+  background: var(--arena);
+  transition: left 0.35s ease, width 0.35s ease;
+}
+
+/* ---------- Mensaje de pista ---------- */
+.mensaje {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 3.25rem;
+  padding: 0.6rem 1rem;
+  border-radius: 1rem;
+  background: rgba(10, 58, 74, 0.5);
+  border: 2px solid rgba(255, 255, 255, 0.25);
+  color: #fff9e8;
+  font-weight: 700;
+  transition: background 0.2s;
+}
+.mensaje.bajo  { background: var(--arena); color: var(--tinta); border-color: var(--tinta); }
+.mensaje.alto  { background: var(--rosa);  color: var(--tinta); border-color: var(--tinta); }
+.mensaje.error { background: #ffd9c9;      color: #7a2a10;      border-color: #7a2a10; }
+
+/* ---------- Historial de intentos ---------- */
+.ficha {
+  font-family: 'Fredoka', 'Nunito', sans-serif;
+  font-weight: 600;
+  font-size: 0.95rem;
+  color: var(--tinta);
+  padding: 0.15rem 0.7rem;
+  border: 2px solid var(--tinta);
+  border-radius: 999px;
+}
+.ficha.bajo { background: var(--arena); }
+.ficha.alto { background: var(--rosa); }
+
+/* ---------- Pantalla de victoria ---------- */
+.gif-vidente {
+  background: #fff;
+  border: 4px solid var(--tinta);
+  border-radius: 1.5rem;
+}
+.insignia {
+  font-family: 'Fredoka', 'Nunito', sans-serif;
+  font-weight: 600;
+  color: var(--tinta);
+  background: var(--arena);
+  padding: 0.3rem 1rem;
+  border: 3px solid var(--tinta);
+  border-radius: 999px;
+}
+
+/* ---------- Marcador ---------- */
+.panel {
+  background: var(--arena);
+  color: var(--tinta);
+  border: 4px solid var(--tinta);
+  border-radius: 1.5rem;
+  box-shadow: 8px 8px 0 var(--tinta);
+}
+@media (min-width: 1024px) {
+  .panel { transform: rotate(1.5deg); }
+}
+.fila {
+  padding-bottom: 0.7rem;
+  border-bottom: 2px dashed rgba(10, 58, 74, 0.35);
+}
+.fila:last-child { padding-bottom: 0; border-bottom: 0; }
+.valor {
+  font-family: 'Fredoka', 'Nunito', sans-serif;
+  font-weight: 700;
+  font-size: 1.5rem;
+  text-align: right;
+}
+.enlace {
+  font-weight: 700;
+  text-decoration: underline;
+  color: var(--tinta);
+  background: none;
+  border: 0;
+  cursor: pointer;
+}
+
+/* ---------- Patricio ---------- */
+.patricio {
+  filter: drop-shadow(0 14px 10px rgba(10, 58, 74, 0.25));
+  animation: flotar 4s ease-in-out infinite;
+}
+@keyframes flotar {
+  50% { transform: translateY(-14px) rotate(-2deg); }
+}
+
+.burbuja {
+  position: relative;
+  max-width: 16rem;
+  padding: 0.6rem 1rem;
+  font-family: 'Fredoka', 'Nunito', sans-serif;
+  font-weight: 500;
+  text-align: center;
+  color: var(--tinta);
+  background: #fff;
+  border: 3px solid var(--tinta);
+  border-radius: 1.25rem;
+}
+.burbuja::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: -13px;
+  width: 20px;
+  height: 20px;
+  background: #fff;
+  border-right: 3px solid var(--tinta);
+  border-bottom: 3px solid var(--tinta);
+  transform: translateX(-50%) rotate(45deg);
+}
+
+/* ---------- Confeti ---------- */
+#confeti {
+  position: fixed;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 50;
+}
+.pieza {
+  position: absolute;
+  top: -20px;
+  width: var(--w);
+  height: calc(var(--w) * 1.6);
+  background: var(--c);
+  border-radius: 2px;
+  animation: caer var(--d) cubic-bezier(0.3, 0.1, 0.6, 1) var(--r) forwards;
+}
+@keyframes caer {
+  to { transform: translate3d(var(--dx), 110vh, 0) rotate(var(--g)); }
+}
+
+/* ---------- Respetar a quien prefiere menos movimiento ---------- */
+@media (prefers-reduced-motion: reduce) {
+  .burbujas span,
+  .patricio,
+  .tarjeta.ganada,
+  .contador.pop,
+  .sacudir { animation: none; }
+  .rango-relleno { transition: none; }
+  #confeti { display: none; }
+}
+
+
+/* ---------- Selector de modo ---------- */
+.selector-modo {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.6rem;
+  margin-bottom: 1.5rem;
+}
+
+.modo-btn {
+  font-family: 'Fredoka', 'Nunito', sans-serif;
+  font-weight: 600;
+  font-size: 0.95rem;
+  padding: 0.6rem 1.1rem;
+  color: #f2fffd;
+  background: rgba(10, 58, 74, 0.35);
+  border: 3px solid rgba(255, 255, 255, 0.45);
+  border-radius: 999px;
+  cursor: pointer;
+  box-shadow: 0 4px 0 rgba(10, 58, 74, 0.7);
+  transition: transform 0.08s, box-shadow 0.08s, background 0.15s;
+}
+
+.modo-btn:hover {
+  transform: translateY(-1px);
+}
+
+.modo-btn:active {
+  transform: translateY(3px);
+  box-shadow: 0 1px 0 rgba(10, 58, 74, 0.7);
+}
+
+.modo-btn.modo-activo {
+  background: var(--arena);
+  color: var(--tinta);
+  border-color: var(--tinta);
+  box-shadow: 0 4px 0 var(--tinta);
+}
+
+
+/* ---------- Interfaz: la máquina adivina ---------- */
+
+#vistaMaquinaJuego {
+  width: 100%;
+}
+
+
+/* ---------- Texto de instrucciones ---------- */
+
+#vistaMaquinaJuego .texto-instruccion {
+  margin-bottom: 1.25rem;
+  text-align: center;
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+
+/* ---------- Número que propone la máquina ---------- */
+
+.adivinanza {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.35rem;
+
+  margin: 1.2rem auto;
+  padding: 1.2rem 1.5rem;
+
+  max-width: 22rem;
+
+  background: rgba(255, 255, 255, 0.12);
+  border: 4px dashed rgba(255, 255, 255, 0.65);
+  border-radius: 1.5rem;
+
+  box-shadow:
+    inset 0 3px 0 rgba(255, 255, 255, 0.12),
+    0 8px 0 rgba(10, 58, 74, 0.25);
+}
+
+.adivinanza-etiqueta {
+  font-family: 'Fredoka', 'Nunito', sans-serif;
+  font-weight: 600;
+  font-size: 1rem;
+  text-align: center;
+  opacity: 0.9;
+}
+
+.adivinanza-numero {
+  display: block;
+
+  font-family: 'Fredoka', 'Nunito', sans-serif;
+  font-weight: 700;
+  font-size: 4.5rem;
+  line-height: 1;
+
+  color: var(--arena);
+  font-variant-numeric: tabular-nums;
+
+  text-shadow:
+    0 3px 0 var(--tinta),
+    0 6px 10px rgba(10, 58, 74, 0.35);
+
+  transition: transform 0.2s ease;
+}
+
+
+/* ---------- Animación cuando cambia el número ---------- */
+
+#numeroMaquina.cambio {
+  animation: cambioNumero 0.35s ease-out;
+}
+
+@keyframes cambioNumero {
+  0% {
+    transform: scale(0.75);
+    opacity: 0.4;
+  }
+
+  60% {
+    transform: scale(1.15);
+    opacity: 1;
+  }
+
+  100% {
+    transform: scale(1);
+  }
+}
+
+
+/* ---------- Texto debajo del número ---------- */
+
+#mensajeMaquina {
+  margin: 1.2rem auto;
+
+  max-width: 32rem;
+  min-height: 3.25rem;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 0.7rem 1rem;
+
+  border-radius: 1rem;
+
+  background: rgba(10, 58, 74, 0.5);
+  border: 2px solid rgba(255, 255, 255, 0.25);
+
+  color: #fff9e8;
+
+  font-weight: 700;
+  text-align: center;
+
+  transition:
+    background 0.2s,
+    transform 0.2s;
+}
+
+#mensajeMaquina.bajo {
+  background: var(--arena);
+  color: var(--tinta);
+  border-color: var(--tinta);
+}
+
+#mensajeMaquina.alto {
+  background: var(--rosa);
+  color: var(--tinta);
+  border-color: var(--tinta);
+}
+
+#mensajeMaquina.error {
+  background: #ffd9c9;
+  color: #7a2a10;
+  border-color: #7a2a10;
+}
+
+
+/* ---------- Botones de respuesta ---------- */
+
+.btn-opcion {
+  font-family: 'Fredoka', 'Nunito', sans-serif;
+  font-weight: 600;
+  font-size: 1.05rem;
+
+  padding: 0.7rem 1.2rem;
+
+  color: var(--tinta);
+  background: #fff;
+
+  border: 3px solid var(--tinta);
+  border-radius: 1rem;
+
+  cursor: pointer;
+
+  box-shadow: 0 5px 0 var(--tinta);
+
+  transition:
+    transform 0.08s,
+    box-shadow 0.08s,
+    background 0.15s;
+}
+
+.btn-opcion:hover {
+  transform: translateY(-2px);
+  background: var(--arena);
+}
+
+.btn-opcion:active {
+  transform: translateY(4px);
+  box-shadow: 0 1px 0 var(--tinta);
+}
+
+
+/* Botón de acertó */
+
+#btnAcerte {
+  background: var(--coral);
+  color: #fff;
+}
+
+#btnAcerte:hover {
+  background: #e8662a;
+}
+
+
+/* ---------- Historial de la máquina ---------- */
+
+#historialMaquina {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.5rem;
+
+  margin-top: 1.2rem;
+  margin-bottom: 1.2rem;
+
+  padding: 0;
+  list-style: none;
+}
+
+#historialMaquina li {
+  font-family: 'Fredoka', 'Nunito', sans-serif;
+  font-weight: 600;
+  font-size: 0.95rem;
+
+  color: var(--tinta);
+
+  padding: 0.2rem 0.75rem;
+
+  border: 2px solid var(--tinta);
+  border-radius: 999px;
+
+  background: #fff;
+}
+
+#historialMaquina li[aria-label*="bajo"] {
+  background: var(--arena);
+}
+
+#historialMaquina li[aria-label*="alto"] {
+  background: var(--rosa);
+}
+
+
+/* ---------- Contador de intentos de la máquina ---------- */
+
+#intentosMaquina {
+  text-align: center;
+  margin-top: 1rem;
+  margin-bottom: 0.5rem;
+
+  font-family: 'Fredoka', 'Nunito', sans-serif;
+  font-weight: 600;
+}
+
+
+/* ---------- Subtítulo del marcador ---------- */
+
+.marcador-subtitulo {
+  margin-top: 0.15rem;
+  margin-bottom: 1.1rem;
+
+  font-size: 0.9rem;
+  font-weight: 700;
+
+  opacity: 0.75;
+}
+
+
+/* ---------- Victoria de la máquina ---------- */
+
+#vistaMaquinaVictoria {
+  text-align: center;
+}
+
+#vistaMaquinaVictoria h2 {
+  font-family: 'Fredoka', 'Nunito', sans-serif;
+  font-weight: 700;
+  font-size: 2rem;
+
+  color: var(--arena);
+
+  text-shadow:
+    2px 2px 0 var(--tinta);
+}
+
+#vistaMaquinaVictoria p {
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+
+/* ---------- Botón reiniciar ---------- */
+
+#btnReiniciarMaquina,
+#btnOtraMaquina {
+  margin-top: 1rem;
+}
+
+
+/* ---------- Responsive ---------- */
+
+@media (max-width: 640px) {
+
+  .modo-btn {
+    width: 100%;
+    max-width: 20rem;
+  }
+
+  .adivinanza {
+    max-width: 18rem;
+    padding: 1rem;
+  }
+
+  .adivinanza-numero {
+    font-size: 3.8rem;
+  }
+
+  .btn-opcion {
+    width: 100%;
+    max-width: 20rem;
+  }
+
+}

@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ejercicio 1 - Adivina el número</title>
+
+  <!-- Tailwind-->
+  <link rel="stylesheet" href="style-tailwind.css">
+  <!-- Tipografías -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
+
+  <!-- Estilos propios (animaciones, colores, detalles) -->
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body class="min-h-screen">
+
+  <!-- Animación del fondo -->
+  <div class="animaciones-fondo" aria-hidden="true">
+    <span style="--x:3%;  --t:34px; --d:15s; --r:-2s"></span>
+    <span style="--x:9%;  --t:20px; --d:11s; --r:-7s"></span>
+    <span style="--x:16%; --t:44px; --d:18s; --r:-11s"></span>
+    <span style="--x:23%; --t:24px; --d:13s; --r:-4s"></span>
+    <span style="--x:30%; --t:38px; --d:16s; --r:-9s"></span>
+    <span style="--x:37%; --t:18px; --d:10s; --r:-1s"></span>
+    <span style="--x:44%; --t:46px; --d:17s; --r:-13s"></span>
+    <span style="--x:51%; --t:22px; --d:12s; --r:-6s"></span>
+    <span style="--x:58%; --t:36px; --d:14s; --r:-10s"></span>
+    <span style="--x:65%; --t:16px; --d:9s;  --r:-3s"></span>
+    <span style="--x:71%; --t:42px; --d:15s; --r:-5s"></span>
+    <span style="--x:77%; --t:26px; --d:11s; --r:-8s"></span>
+    <span style="--x:83%; --t:48px; --d:18s; --r:-2s"></span>
+    <span style="--x:88%; --t:20px; --d:13s; --r:-12s"></span>
+    <span style="--x:93%; --t:34px; --d:16s; --r:-6s"></span>
+    <span style="--x:97%; --t:14px; --d:10s; --r:-9s"></span>
+    <span style="--x:14%; --t:28px; --d:14s; --r:-14s"></span>
+    <span style="--x:60%; --t:30px; --d:12s; --r:-4s"></span>
+  </div>
+
+  <main class="relative z-10 mx-auto max-w-6xl px-4 pt-4 pb-6 sm:pt-6">
+
+    <h1 class="titulo fuente-titulo text-center text-2xl leading-tight sm:text-4xl">
+      ¿Podrás adivinar el número que estoy pensando?
+    </h1>
+
+    <!-- En pantallas grandes: Patricio | juego | marcador. En celular: juego, marcador, Patricio -->
+    <div class="mt-4 grid items-center gap-6 sm:mt-6 lg:grid-cols-[1fr_24rem_1fr]">
+
+      <!-- ============ Patricio ============ -->
+      <aside class="order-3 flex flex-col items-center gap-3 lg:order-1">
+        <p id="patricioDice" class="burbuja" aria-hidden="true">Ya tengo el número. ¡Adivina!</p>
+        <img src="recursos/patricio.png" alt="Patricio Estrella"
+             class="patricio h-auto w-32 sm:w-40 lg:w-full lg:max-w-[13rem]">
+      </aside>
+
+      <!-- ============ Tarjeta del juego ============ -->
+     <section id="tarjeta" class="tarjeta order-1 p-6 text-center sm:p-8 lg:order-2">
+
+      <div class="selector-modo" role="tablist" aria-label="Elegí el modo de juego">
+
+        <button
+            type="button"
+            id="btnModoJugador"
+            class="modo-btn modo-activo"
+            role="tab"
+            aria-selected="true">
+            Yo adivino, vos pensás
+        </button>
+
+        <button
+            type="button"
+            id="btnModoMaquina"
+            class="modo-btn"
+            role="tab"
+            aria-selected="false">
+            Yo pienso, vos adivinás
+        </button>
+
+      </div>
+
+      <div id="modoJugadorContenedor">
+        <!-- Vista: jugando -->
+        <div id="vistaJuego">
+          <div class="flex flex-col gap-5">
+
+            <p class="fuente-titulo text-xl sm:text-2xl">Escribe un número del 1 al 1000</p>
+
+            <p class="flex items-baseline justify-center gap-3">
+              <span class="fuente-titulo text-xl">Intentos</span>
+              <strong id="intentos" class="contador">0</strong>
+            </p>
+
+            <div>
+              <div class="rango-pista" aria-hidden="true">
+                <div id="rangoRelleno" class="rango-relleno"></div>
+              </div>
+              <p id="rangoTexto" class="mt-2 text-sm font-semibold">Está entre 1 y 1000</p>
+            </div>
+
+            <form id="formulario" novalidate class="flex flex-col items-center gap-3">
+              <label for="numero" class="sr-only">Tu número</label>
+              <input id="numero" type="number" inputmode="numeric" min="1" max="1000"
+                    placeholder="Ejemplo: 500" autocomplete="off" class="entrada w-full">
+              <button type="submit" class="btn btn-principal w-full">Probar</button>
+            </form>
+
+            <p id="mensaje" class="mensaje" role="status" aria-live="polite">
+              Escribe tu primer número para empezar.
+            </p>
+
+            <ul id="historial" class="flex max-h-24 min-h-8 flex-wrap justify-center gap-2 overflow-y-auto"></ul>
+
+            <button id="btnReiniciar" type="button" class="btn btn-secundario">Reiniciar partida</button>
+          </div>
+        </div>
+
+        <!-- Vista: ganaste -->
+        <div id="vistaVictoria" class="oculto">
+          <div class="flex flex-col items-center gap-4">
+            <img src="recursos/vidente.gif" alt="El vidente celebra tu victoria" class="gif-vidente h-auto w-full max-w-64">
+            <h2 class="fuente-titulo text-3xl">¡Felicidades, adivinaste!</h2>
+            <p id="victoriaTexto" class="text-lg"></p>
+            <p id="insignia" class="insignia oculto">¡Nuevo mejor puntaje!</p>
+            <button id="btnOtra" type="button" class="btn btn-principal w-full">Jugar de nuevo</button>
+          </div>
+        </div>
+      </div>
+
+      <div id="modoMaquinaContenedor" class="oculto">
+
+        <div id="vistaMaquinaJuego">
+
+            <p class="texto-instruccion">
+                Pensá un número del 1 al 1000.
+                No me lo digas.
+            </p>
+
+            <div class="adivinanza">
+
+                <span class="adivinanza-etiqueta">
+                    Creo que tu número es...
+                </span>
+
+                <strong id="numeroMaquina" class="adivinanza-numero">
+                    500
+                </strong>
+
+            </div>
+
+            <p id="mensajeMaquina" class="mensaje">
+                ¿Tu número es más alto, más bajo o acerté?
+            </p>
+
+            <div class="flex flex-wrap justify-center gap-3">
+
+                <button
+                    type="button"
+                    id="btnMasBajo"
+                    class="btn-opcion">
+                    Mi número es más bajo ↓
+                </button>
+
+                <button
+                    type="button"
+                    id="btnMasAlto"
+                    class="btn-opcion">
+                    Mi número es más alto ↑
+                </button>
+
+                <button
+                    type="button"
+                    id="btnAcerte"
+                    class="btn-opcion">
+                    ¡Acertaste! 🎉
+                </button>
+
+            </div>
+
+            <div class="mt-4 text-center">
+              <span class="contador" id="intentosMaquina">0</span>
+              <p class="font-semibold">intentos</p>
+          </div>
+
+            <button
+                type="button"
+                id="btnReiniciarMaquina"
+                class="btn btn-secundario">
+                Empezar de nuevo
+            </button>
+
+        </div>
+
+
+        <div id="vistaMaquinaVictoria" class="oculto">
+
+            <h2>¡Adiviné tu número! 🎉</h2>
+
+            <p id="victoriaTextoMaquina"></p>
+
+            <button
+                type="button"
+                id="btnOtraMaquina"
+                class="btn btn-principal">
+                Jugar otra vez
+            </button>
+
+        </div>
+
+    </div>
+    </section>
+
+      <!-- ============ Marcador ============ -->
+      <aside class="order-2 lg:order-3">
+        <div class="panel p-6">
+          <h2 class="fuente-titulo text-2xl">Tu marcador</h2>
+          <p id="marcadorSubtitulo" class="marcador-subtitulo">Modo: vos adivinás</p>
+          <dl class="flex flex-col gap-4">
+            <div class="fila flex items-baseline justify-between gap-3">
+              <dt class="font-semibold">Mejor puntaje</dt>
+              <dd id="statMejor" class="valor">—</dd>
+            </div>
+            <div class="fila flex items-baseline justify-between gap-3">
+              <dt class="font-semibold">Partidas finalizadas</dt>
+              <dd id="statPartidas" class="valor">0</dd>
+            </div>
+            <div class="fila flex items-baseline justify-between gap-3">
+              <dt class="font-semibold">Promedio de intentos</dt>
+              <dd id="statPromedio" class="valor">—</dd>
+            </div>
+          </dl>
+
+          <button id="btnBorrar" type="button" class="enlace mt-6 text-sm">Borrar estadísticas</button>
+        </div>
+      </aside>
+
+    </div>
+  </main>
+
+  <!-- Contenedor del confeti -->
+  <div id="confeti" aria-hidden="true"></div>
+
+  <script src="ajax.js"></script>
+</body>
+</html>
