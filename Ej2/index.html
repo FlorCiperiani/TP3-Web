@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Turnero aleatorio</title>
+    <link rel="stylesheet" href="style-tailwind.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="text-slate-100 antialiased">
+    <main class="turnero-shell">
+        <header class="turnero-header">
+            <h1 class="turnero-title">Turnero aleatorio</h1>
+            <p class="turnero-subtitle">Generá turnos sin repeticiones dentro del rango configurado</p>
+        </header>
+
+        <div id="mensaje" class="turnero-alert hidden" role="alert" aria-live="polite"></div>
+
+        <div class="turnero-layout">
+            <section class="glass-panel accent-ring turnero-panel">
+                <div class="turnero-panel-header">
+                    <h2 class="turnero-panel-title">Configuración</h2>
+                    <p class="turnero-panel-copy">Definí los límites que usará el turnero.</p>
+                </div>
+
+                <form id="form-configuracion" novalidate class="turnero-form">
+                    <div class="turnero-input-grid">
+                        <div>
+                            <label class="turnero-label" for="limite-inferior">Límite inferior</label>
+                            <input class="turnero-input turnero-input-cyan" id="limite-inferior" type="number" min="0" step="1" required>
+                        </div>
+                        <div>
+                            <label class="turnero-label" for="limite-superior">Límite superior</label>
+                            <input class="turnero-input turnero-input-fuchsia" id="limite-superior" type="number" min="0" step="1" required>
+                        </div>
+                    </div>
+
+                    <button class="turnero-btn turnero-btn-primary" type="submit">Guardar límites</button>
+                </form>
+
+                <div class="turnero-divider"></div>
+
+                <button id="btn-reiniciar" class="turnero-btn turnero-btn-danger" type="button">Reiniciar números generados</button>
+            </section>
+
+            <section class="glass-panel accent-ring turnero-panel turnero-panel-display">
+                <div class="turnero-display-wrap">
+                    <p class="turnero-display-label">Último número</p>
+                    <div id="numero-actual" class="turnero-number" aria-live="polite">—</div>
+                    <p id="rango-actual" class="turnero-range">Cargando configuración...</p>
+
+                    <button id="btn-generar" class="turnero-btn-generate" type="button" disabled>Generar número</button>
+
+                    <div class="turnero-counter">
+                        <span>Números generados</span>
+                        <strong id="cantidad-generados" class="turnero-counter-number">0</strong>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <section class="glass-panel accent-ring turnero-history">
+            <div class="turnero-history-head">
+                <div>
+                    <h2 class="turnero-panel-title">Historial</h2>
+                    <p class="turnero-panel-copy">Los números se guardan para evitar repeticiones.</p>
+                </div>
+                <span id="estado-carga" class="estado-badge estado-badge-default"></span>
+            </div>
+
+            <div id="historial" class="turnero-historial" aria-live="polite">
+                <p class="turnero-empty">Todavía no se generaron números.</p>
+            </div>
+        </section>
+    </main>
+
+    <script src="script.js"></script>
+</body>
+</html>
