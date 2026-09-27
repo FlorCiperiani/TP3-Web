@@ -42,24 +42,27 @@
 
   <main class="relative z-10 mx-auto max-w-6xl px-4 pt-4 pb-6 sm:pt-6">
 
-    <h1 class="titulo fuente-titulo text-center text-2xl leading-tight sm:text-4xl">
-      ¿Podrás adivinar el número que estoy pensando?
-    </h1>
 
     <!-- En pantallas grandes: Patricio | juego | marcador. En celular: juego, marcador, Patricio -->
     <div class="mt-4 grid items-center gap-6 sm:mt-6 lg:grid-cols-[1fr_24rem_1fr]">
 
       <!-- ============ Patricio ============ -->
       <aside class="order-3 flex flex-col items-center gap-3 lg:order-1">
-        <p id="patricioDice" class="burbuja" aria-hidden="true">Ya tengo el número. ¡Adivina!</p>
-        <img src="recursos/patricio.png" alt="Patricio Estrella"
-             class="patricio h-auto w-32 sm:w-40 lg:w-full lg:max-w-[13rem]">
+        <p id="patricioDice" class="dialogo-patricio" aria-hidden="true">
+          Ya tengo el número. ¡Adivina!
+        </p>
+        <div class="contenedor-patricio">
+          <img id="imagenPatricio"
+              src="recursos/patricio.png"
+              alt="Patricio Estrella"
+              class="patricio">
+        </div>
       </aside>
 
       <!-- ============ Tarjeta del juego ============ -->
      <section id="tarjeta" class="tarjeta order-1 p-6 text-center sm:p-8 lg:order-2">
 
-      <div class="selector-modo" role="tablist" aria-label="Elegí el modo de juego">
+      <div id="botonesMaquina" class="selector-modo" role="tablist" aria-label="Elegí el modo de juego">
 
         <button
             type="button"
@@ -67,7 +70,7 @@
             class="modo-btn modo-activo"
             role="tab"
             aria-selected="true">
-            Yo adivino, vos pensás
+            Yo adivino
         </button>
 
         <button
@@ -76,7 +79,7 @@
             class="modo-btn"
             role="tab"
             aria-selected="false">
-            Yo pienso, vos adivinás
+            Yo pienso
         </button>
 
       </div>
@@ -149,24 +152,20 @@
                 </strong>
 
             </div>
-
-            <p id="mensajeMaquina" class="mensaje">
-                ¿Tu número es más alto, más bajo o acerté?
-            </p>
-
+            <p id="mensajeMaquina" class="mensaje oculto" role="status" aria-live="polite"></p>
             <div class="flex flex-wrap justify-center gap-3">
 
                 <button
                     type="button"
                     id="btnMasBajo"
-                    class="btn-opcion">
+                    class="btn-opcion btn-opcion-bajo">
                     Mi número es más bajo ↓
                 </button>
 
                 <button
                     type="button"
                     id="btnMasAlto"
-                    class="btn-opcion">
+                    class="btn-opcion btn-opcion-alto">
                     Mi número es más alto ↑
                 </button>
 

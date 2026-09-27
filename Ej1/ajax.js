@@ -4,6 +4,8 @@
 
 const MIN = 1;
 const MAX = 1000;
+const IMAGEN_PATRICIO_NORMAL = 'recursos/patricio.png';
+const IMAGEN_PATRICIO_GANA = 'recursos/patricio-Ja.png';
 const CLAVE_STATS = 'adivina-numero:estadisticas';
 
 /* ---------- Referencias al HTML ---------- */
@@ -15,11 +17,11 @@ const el = {
   formulario: $('formulario'),
   numero: $('numero'),
   intentos: $('intentos'),
-  mensaje: $('mensaje'),
   historial: $('historial'),
   rangoRelleno: $('rangoRelleno'),
   rangoTexto: $('rangoTexto'),
   patricioDice: $('patricioDice'),
+  imagenPatricio: $('imagenPatricio'),
   victoriaTexto: $('victoriaTexto'),
   insignia: $('insignia'),
   btnReiniciar: $('btnReiniciar'),
@@ -29,6 +31,7 @@ const el = {
   statPartidas: $('statPartidas'),
   statPromedio: $('statPromedio'),
   confeti: $('confeti'),
+  mensaje: $('mensaje'),
 };
 const elM = {
   contenedorJugador: $('modoJugadorContenedor'),
@@ -48,8 +51,9 @@ const elM = {
   btnAcerte: $('btnAcerte'),
   btnReiniciar: $('btnReiniciarMaquina'),
   btnOtra: $('btnOtraMaquina'),
-  victoriaTexto: $('victoriaMaquinaTexto'),
+  victoriaTexto: $('victoriaTextoMaquina'),
   marcadorSubtitulo: $('marcadorSubtitulo'),
+  botones: $('botonesMaquina'),
 };
 
 let modoActual = 'jugador';
@@ -273,6 +277,7 @@ function ganar() {
    ========================================================= */
 
 function cambiarModo(modo) {
+  el.imagenPatricio.src = IMAGEN_PATRICIO_NORMAL;
   modoActual = modo;
   const esMaquina = modo === 'maquina';
 
@@ -281,13 +286,20 @@ function cambiarModo(modo) {
 
   elM.btnModoJugador.classList.toggle('modo-activo', !esMaquina);
   elM.btnModoJugador.setAttribute('aria-selected', String(!esMaquina));
+
   elM.btnModoMaquina.classList.toggle('modo-activo', esMaquina);
   elM.btnModoMaquina.setAttribute('aria-selected', String(esMaquina));
 
-  elM.marcadorSubtitulo.textContent = esMaquina ? 'Modo: yo adivino' : 'Modo: vos adivinás';
+  elM.marcadorSubtitulo.textContent =
+    esMaquina ? 'Modo: yo adivino' : 'Modo: vos adivinás';
+
   el.patricioDice.textContent = esMaquina
     ? 'Pensá tu número... yo lo voy a encontrar.'
     : 'Ya tengo el número. ¡Adivina!';
+
+  if (esMaquina) {
+    nuevaPartidaMaquina();
+  }
 
   dibujarStatsActivo();
 }
@@ -301,6 +313,9 @@ function nuevaPartidaMaquina() {
 
   elM.vistaVictoria.classList.add('oculto');
   elM.vistaJuego.classList.remove('oculto');
+  ocultarMensajeMaquina();
+  el.imagenPatricio.src = IMAGEN_PATRICIO_NORMAL;
+  el.patricioDice.textContent = 'Pensá tu número... yo lo voy a encontrar.';
 
   siguienteIntentoMaquina();
 }
@@ -309,31 +324,25 @@ function siguienteIntentoMaquina() {
   intentosM++;
   propuestaM = Math.floor((minM + maxM) / 2);
   elM.numero.textContent = propuestaM;
-  mostrarMensajeMaquina('¿Es más alto, más bajo, o acerté?');
   dibujarMaquina();
 }
 
 function mostrarMensajeMaquina(texto, tipo = '') {
   elM.mensaje.textContent = texto;
   elM.mensaje.className = 'mensaje ' + tipo;
+  elM.mensaje.classList.remove('oculto');
+  elM.botones.classList.add('oculto');
+}
+
+function ocultarMensajeMaquina() {
+  elM.mensaje.classList.add('oculto');
+  elM.mensaje.textContent = '';
+  elM.botones.classList.remove('oculto');
 }
 
 function dibujarMaquina() {
   elM.intentos.textContent = intentosM;
 
-  const total = MAX - MIN + 1;
-  elM.rangoTexto.textContent = `Está entre ${minM} y ${maxM}`;
-  elM.rangoRelleno.style.left = ((minM - MIN) / total) * 100 + '%';
-  elM.rangoRelleno.style.width = ((maxM - minM + 1) / total) * 100 + '%';
-
-  elM.historial.innerHTML = '';
-  historialM.forEach(({ n, tipo }) => {
-    const li = document.createElement('li');
-    li.className = 'ficha ' + tipo;
-    li.textContent = (tipo === 'bajo' ? '↓ ' : '↑ ') + n;
-    li.setAttribute('aria-label', `${n}, ${tipo === 'bajo' ? 'tu número es más bajo' : 'tu número es más alto'}`);
-    elM.historial.appendChild(li);
-  });
 }
 
 function responderMaquina(tipo) {
@@ -375,6 +384,7 @@ function ganarMaquina() {
 
   elM.victoriaTexto.textContent = `Tu número era ${propuestaM} y lo encontré en ${textoIntentos(intentosM)}.`;
   el.patricioDice.textContent = '¡Ja! Nunca fallo.';
+  el.imagenPatricio.src = IMAGEN_PATRICIO_GANA;
 
   elM.vistaJuego.classList.add('oculto');
   elM.vistaVictoria.classList.remove('oculto');
@@ -444,4 +454,3 @@ elM.btnOtra.addEventListener('click', nuevaPartidaMaquina);
 
 /* ---------- Arranque ---------- */
 nuevaPartida();
-nuevaPartidaMaquina();

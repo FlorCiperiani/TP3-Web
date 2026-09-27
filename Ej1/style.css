@@ -11,6 +11,8 @@
   --rosa: #ffc4d3;       /* pista "muy alto" */
   --mar-1: #19b9b4;      /* turquesa de la tarjeta */
   --mar-2: #0b7f86;
+  --verde: #7df1a0;
+
 }
 
 body {
@@ -190,7 +192,7 @@ body {
   font-weight: 700;
   transition: background 0.2s;
 }
-.mensaje.bajo  { background: var(--arena); color: var(--tinta); border-color: var(--tinta); }
+.mensaje.bajo  { background: var(--verde); color: var(--tinta); border-color: var(--tinta); }
 .mensaje.alto  { background: var(--rosa);  color: var(--tinta); border-color: var(--tinta); }
 .mensaje.error { background: #ffd9c9;      color: #7a2a10;      border-color: #7a2a10; }
 
@@ -204,7 +206,7 @@ body {
   border: 2px solid var(--tinta);
   border-radius: 999px;
 }
-.ficha.bajo { background: var(--arena); }
+.ficha.bajo { background: var(--verde); }
 .ficha.alto { background: var(--rosa); }
 
 /* ---------- Pantalla de victoria ---------- */
@@ -263,7 +265,7 @@ body {
   50% { transform: translateY(-14px) rotate(-2deg); }
 }
 
-.burbuja {
+.dialogo-patricio {
   position: relative;
   max-width: 16rem;
   padding: 0.6rem 1rem;
@@ -275,7 +277,7 @@ body {
   border: 3px solid var(--tinta);
   border-radius: 1.25rem;
 }
-.burbuja::after {
+.dialogo-patricio::after {
   content: "";
   position: absolute;
   left: 50%;
@@ -286,6 +288,30 @@ body {
   border-right: 3px solid var(--tinta);
   border-bottom: 3px solid var(--tinta);
   transform: translateX(-50%) rotate(45deg);
+}
+
+/* ---------- Imagen de Patricio ---------- */
+
+.contenedor-patricio {
+  width: 13rem;
+  height: 18rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.patricio {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  filter: drop-shadow(0 14px 10px rgba(10, 58, 74, 0.25));
+  animation: flotar 4s ease-in-out infinite;
+}
+
+@keyframes flotar {
+  50% {
+    transform: translateY(-14px) rotate(-2deg);
+  }
 }
 
 /* ---------- Confeti ---------- */
@@ -309,16 +335,7 @@ body {
   to { transform: translate3d(var(--dx), 110vh, 0) rotate(var(--g)); }
 }
 
-/* ---------- Respetar a quien prefiere menos movimiento ---------- */
-@media (prefers-reduced-motion: reduce) {
-  .burbujas span,
-  .patricio,
-  .tarjeta.ganada,
-  .contador.pop,
-  .sacudir { animation: none; }
-  .rango-relleno { transition: none; }
-  #confeti { display: none; }
-}
+
 
 
 /* ---------- Selector de modo ---------- */
@@ -524,9 +541,14 @@ body {
     background 0.15s;
 }
 
-.btn-opcion:hover {
+.btn-opcion-alto:hover {
   transform: translateY(-2px);
-  background: var(--arena);
+  background: var(--verde);
+}
+
+.btn-opcion-bajo:hover {
+  transform: translateY(-2px);
+  background: var(--rosa);
 }
 
 .btn-opcion:active {
