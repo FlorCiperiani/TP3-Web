@@ -14,8 +14,6 @@
             <p class="turnero-subtitle">Generá turnos sin repeticiones dentro del rango configurado</p>
         </header>
 
-        <div id="mensaje" class="turnero-alert hidden" role="alert" aria-live="polite"></div>
-
         <div class="turnero-layout">
             <section class="glass-panel accent-ring turnero-panel">
                 <div class="turnero-panel-header">
@@ -35,12 +33,18 @@
                         </div>
                     </div>
 
-                    <button class="turnero-btn turnero-btn-primary" type="submit">Guardar límites</button>
+                    <div class="turnero-action-group">
+                        <button class="turnero-btn turnero-btn-primary" type="submit">Guardar límites</button>
+                        <p id="mensaje-limites" class="turnero-action-message" role="status" aria-live="polite" hidden></p>
+                    </div>
                 </form>
 
                 <div class="turnero-divider"></div>
 
-                <button id="btn-reiniciar" class="turnero-btn turnero-btn-danger" type="button">Reiniciar números generados</button>
+                <div class="turnero-action-group">
+                    <button id="btn-reiniciar" class="turnero-btn turnero-btn-danger" type="button">Reiniciar números generados</button>
+                    <p id="mensaje-reinicio" class="turnero-action-message" role="status" aria-live="polite" hidden></p>
+                </div>
             </section>
 
             <section class="glass-panel accent-ring turnero-panel turnero-panel-display">
@@ -48,8 +52,10 @@
                     <p class="turnero-display-label">Último número</p>
                     <div id="numero-actual" class="turnero-number" aria-live="polite">—</div>
                     <p id="rango-actual" class="turnero-range">Cargando configuración...</p>
-
-                    <button id="btn-generar" class="turnero-btn-generate" type="button" disabled>Generar número</button>
+                    <div class="turnero-action-group turnero-action-group-display">
+                        <button id="btn-generar" class="turnero-btn-generate" type="button" disabled>Generar número</button>
+                        <p id="mensaje-generar" class="turnero-action-message" role="status" aria-live="polite" hidden></p>
+                    </div>
 
                     <div class="turnero-counter">
                         <span>Números generados</span>
@@ -65,7 +71,6 @@
                     <h2 class="turnero-panel-title">Historial</h2>
                     <p class="turnero-panel-copy">Los números se guardan para evitar repeticiones.</p>
                 </div>
-                <span id="estado-carga" class="estado-badge estado-badge-default"></span>
             </div>
 
             <div id="historial" class="turnero-historial" aria-live="polite">

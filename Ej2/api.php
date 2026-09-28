@@ -26,6 +26,21 @@ function validarLimites(mixed $inferior, mixed $superior): bool
         && $superior >= $inferior;
 }
 
+function extremosNumerosGenerados(array $numeros): array
+{
+    $menor = null;
+    $mayor = null;
+    foreach ($numeros as $item) {
+        if (!is_array($item) || !isset($item['numero']) || !is_numeric($item['numero'])) {
+            continue;
+        }
+        $numero = (int) $item['numero'];
+        $menor = $menor === null ? $numero : min($menor, $numero);
+        $mayor = $mayor === null ? $numero : max($mayor, $numero);
+    }
+    return [$menor, $mayor];
+}
+
 function leerEstado(string $archivo): array
 {
     if (!is_file($archivo)) {
@@ -63,6 +78,14 @@ try {
         $numeros = $entrada['números'] ?? [];
         if (!validarLimites($inferior, $superior) || !is_array($numeros)) {
             responder(false, 'Los datos recibidos no son válidos.', null, 422);
+        }
+        $numerosGuardados = is_array($estado['números']) ? $estado['números'] : [];
+        [$menorGenerado, $mayorGenerado] = extremosNumerosGenerados(array_merge($numerosGuardados, $numeros));
+        if ($menorGenerado !== null && $inferior > $menorGenerado) {
+            responder(false, "El límite inferior no puede ser mayor que el menor número generado ({$menorGenerado}).", null, 422);
+        }
+        if ($mayorGenerado !== null && $superior < $mayorGenerado) {
+            responder(false, "El límite superior no puede ser menor que el mayor número generado ({$mayorGenerado}).", null, 422);
         }
         guardarEstado($archivo, [
             'limite inferior' => $inferior,

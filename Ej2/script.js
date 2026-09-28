@@ -8,7 +8,8 @@ class EstadoTurnero {
     }
 
     get cantidadDisponible() {
-        return this.limiteSuperior - this.limiteInferior + 1 - this.numeros.length;
+        const numerosEnRango = this.numeros.filter((numero) => this.dentroDelRango(numero)).length;
+        return this.limiteSuperior - this.limiteInferior + 1 - numerosEnRango;
     }
 
     contiene(numero) {
@@ -80,10 +81,19 @@ class TurneroAleatorio {
         if (!this.validarLimites(inferior, superior)) {
             throw new Error("Ingresá límites enteros válidos. El inferior debe ser menor o igual al superior.");
         }
+        const numerosGenerados = this.estado?.numeros ?? [];
+        const menorGenerado = numerosGenerados.length ? Math.min(...numerosGenerados) : null;
+        const mayorGenerado = numerosGenerados.length ? Math.max(...numerosGenerados) : null;
+        if (menorGenerado !== null && inferior > menorGenerado) {
+            throw new Error(`El límite inferior no puede ser mayor que el menor número generado (${menorGenerado}).`);
+        }
+        if (mayorGenerado !== null && superior < mayorGenerado) {
+            throw new Error(`El límite superior no puede ser menor que el mayor número generado (${mayorGenerado}).`);
+        }
         const estado = new EstadoTurnero({
             "limite inferior": inferior,
             "limite superior": superior,
-            "números": []
+            "números": (this.estado?.numeros ?? []).map((numero) => ({ numero }))
         });
         return this.establecerEstado(await this.api.guardar(estado));
     }
@@ -137,8 +147,9 @@ class AplicacionTurnero {
             rango: document.querySelector("#rango-actual"),
             cantidad: document.querySelector("#cantidad-generados"),
             historial: document.querySelector("#historial"),
-            mensaje: document.querySelector("#mensaje"),
-            estadoCarga: document.querySelector("#estado-carga")
+            mensajeLimites: document.querySelector("#mensaje-limites"),
+            mensajeReinicio: document.querySelector("#mensaje-reinicio"),
+            mensajeGenerar: document.querySelector("#mensaje-generar")
         };
     }
 
@@ -152,59 +163,54 @@ class AplicacionTurnero {
     async cargar() {
         try {
             this.actualizarVista(this.turnero.establecerEstado(await this.api.cargar()));
-            this.elementos.estadoCarga.textContent = "";
-            this.elementos.estadoCarga.className = "";
         } catch (error) {
-            this.mostrarMensaje(error.message, "danger");
-            this.elementos.estadoCarga.textContent = "";
-            this.elementos.estadoCarga.className = "";
+            this.mostrarMensaje(this.elementos.mensajeLimites, error.message, "danger");
         }
     }
 
     async guardarLimites(evento) {
         evento.preventDefault();
+        this.limpiarMensajes();
         const inferior = Number(this.elementos.inferior.value);
         const superior = Number(this.elementos.superior.value);
         try {
             this.bloquear(true);
-            this.actualizarVista(await this.turnero.actualizarLimites(inferior, superior));
-            this.mostrarMensaje("Límites guardados. Se reinició el historial para usar el nuevo rango.", "success");
-            this.elementos.estadoCarga.textContent = "";
-            this.elementos.estadoCarga.className = "";
+            const estado = await this.turnero.actualizarLimites(inferior, superior);
+            const ultimoNumero = estado.numeros[estado.numeros.length - 1] ?? null;
+            this.actualizarVista(estado, ultimoNumero);
+            this.mostrarMensaje(this.elementos.mensajeLimites, "Límites guardados.", "success");
         } catch (error) {
-            this.mostrarMensaje(error.message, "danger");
+            this.mostrarMensaje(this.elementos.mensajeLimites, error.message, "danger");
         } finally {
             this.bloquear(false);
         }
     }
 
     async generarNumero() {
+        this.limpiarMensajes();
         try {
             this.bloquear(true);
             const numero = await this.turnero.generar();
             if (numero === null) {
-                this.mostrarMensaje("Todos los números están generados.", "warning");
+                this.mostrarMensaje(this.elementos.mensajeGenerar, "Todos los números están generados.", "warning");
                 return;
             }
             this.actualizarVista(this.turnero.estado, numero);
-            this.elementos.mensaje.classList.add("hidden");
-            this.elementos.mensaje.textContent = "";
         } catch (error) {
-            this.mostrarMensaje(error.message, "danger");
+            this.mostrarMensaje(this.elementos.mensajeGenerar, error.message, "danger");
         } finally {
             this.bloquear(false);
         }
     }
 
     async reiniciar() {
+        this.limpiarMensajes();
         try {
             this.bloquear(true);
             this.actualizarVista(await this.turnero.reiniciar());
-            this.mostrarMensaje("El turnero fue reiniciado.", "danger");
-            this.elementos.estadoCarga.className = "";
-            this.elementos.estadoCarga.textContent = "";
+            this.mostrarMensaje(this.elementos.mensajeReinicio, "Números reiniciados.", "danger");
         } catch (error) {
-            this.mostrarMensaje(error.message, "danger");
+            this.mostrarMensaje(this.elementos.mensajeReinicio, error.message, "danger");
         } finally {
             this.bloquear(false);
         }
@@ -219,20 +225,28 @@ class AplicacionTurnero {
         this.elementos.generar.disabled = estado.cantidadDisponible <= 0;
         this.elementos.historial.innerHTML = estado.numeros.length
             ? estado.numeros.map((numero) => `<span class="inline-flex min-w-11 items-center justify-center rounded-full border border-violet-300/40 bg-violet-500/10 px-2.5 py-1.5 text-sm font-bold text-violet-100 shadow-sm shadow-violet-950/40">${numero}</span>`).join("")
-            : '<p class="text-sm text-slate-300">Todavía no se generaron números.</p>';
+            : '<p class="turnero-empty">Todavía no se generaron números.</p>';
     }
 
-    mostrarMensaje(texto, tipo) {
-        this.elementos.mensaje.textContent = texto;
-
+    mostrarMensaje(elemento, texto, tipo) {
         const colorMap = {
-            success: "turnero-alert-success",
-            danger: "turnero-alert-danger",
-            warning: "turnero-alert-warning"
+            success: "turnero-message-success",
+            danger: "turnero-message-danger",
+            warning: "turnero-message-warning"
         };
 
-        this.elementos.mensaje.className = `turnero-alert ${colorMap[tipo] || colorMap.success}`;
-        this.elementos.mensaje.classList.remove("hidden");
+        elemento.textContent = texto;
+        elemento.className = `turnero-action-message ${colorMap[tipo] || colorMap.success}`;
+        elemento.hidden = false;
+    }
+
+    limpiarMensajes() {
+        [this.elementos.mensajeLimites, this.elementos.mensajeReinicio, this.elementos.mensajeGenerar]
+            .forEach((elemento) => {
+                elemento.textContent = "";
+                elemento.hidden = true;
+                elemento.className = "turnero-action-message";
+            });
     }
 
     bloquear(bloqueado) {
