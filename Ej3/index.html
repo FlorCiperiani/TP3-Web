@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Dog API - TP4 Actividad 3</title>
+  <!-- Aquí la persona de estilos puede agregar Bootstrap / CSS propio -->
+  <!-- <link rel="stylesheet" href="styles.css"> -->
+</head>
+<body>
+
+  <header id="app-header">
+    <h1>Dog API</h1>
+    <p>Web reactiva consumiendo la <a href="https://dog.ceo/dog-api/" target="_blank" rel="noopener">Dog API</a></p>
+    <p id="stat-total">Razas principales disponibles: <span id="total-breeds">...</span></p>
+    <nav id="main-nav">
+      <button type="button" class="nav-btn" data-section="section-generator">Generador</button>
+      <button type="button" class="nav-btn" data-section="section-gallery">Galería por raza</button>
+      <button type="button" class="nav-btn" data-section="section-quiz">Adiviná la raza</button>
+      <button type="button" class="nav-btn" data-section="section-favorites">Favoritos <span id="fav-count">(0)</span></button>
+    </nav>
+  </header>
+
+  <main>
+
+    <!-- ===================== GENERADOR ===================== -->
+    <section id="section-generator" class="app-section">
+      <h2>Generador de perros</h2>
+
+      <div id="generator-controls" class="controls">
+        <div class="control-group">
+          <label for="opt-breed">Raza</label>
+          <select id="opt-breed">
+            <option value="">Cualquiera</option>
+          </select>
+        </div>
+
+        <div class="control-group">
+          <label for="opt-subbreed">Sub-raza</label>
+          <select id="opt-subbreed" disabled>
+            <option value="">Cualquiera</option>
+          </select>
+        </div>
+
+        <div class="control-group">
+          <label for="opt-count">Cantidad de imágenes</label>
+          <select id="opt-count">
+            <option value="1" selected>1</option>
+            <option value="3">3</option>
+            <option value="6">6</option>
+            <option value="9">9</option>
+          </select>
+        </div>
+
+        <div class="control-actions">
+          <button type="button" id="btn-generate">Obtener perro aleatorio</button>
+          <button type="button" id="btn-reset-options">Restablecer opciones</button>
+        </div>
+      </div>
+
+      <div id="generator-status" role="status" aria-live="polite"></div>
+      <div id="generator-results"></div>
+
+      <div id="history-block">
+        <h3>Últimas imágenes generadas</h3>
+        <ul id="history-list"></ul>
+        <button type="button" id="btn-clear-history">Limpiar historial</button>
+      </div>
+    </section>
+
+    <!-- ===================== GALERIA ===================== -->
+    <section id="section-gallery" class="app-section" hidden>
+      <h2>Galería por raza</h2>
+      <p>Elegí una raza para ver todas sus fotos. Sin raza, se muestra una selección aleatoria.</p>
+
+      <div id="gallery-controls" class="controls">
+        <div class="control-group">
+          <label for="gallery-breed">Raza</label>
+          <select id="gallery-breed">
+            <option value="">Aleatorio (todas)</option>
+          </select>
+        </div>
+        <div class="control-group">
+          <label for="gallery-subbreed">Sub-raza</label>
+          <select id="gallery-subbreed" disabled>
+            <option value="">Todas</option>
+          </select>
+        </div>
+        <div class="control-group">
+          <label for="gallery-limit">Imágenes por página</label>
+          <select id="gallery-limit">
+            <option value="6">6</option>
+            <option value="12" selected>12</option>
+            <option value="24">24</option>
+          </select>
+        </div>
+        <div class="control-actions">
+          <button type="button" id="btn-gallery-reload">Recargar</button>
+        </div>
+      </div>
+
+      <div id="gallery-status" role="status" aria-live="polite"></div>
+      <p id="gallery-info"></p>
+      <div id="gallery-grid"></div>
+
+      <div id="gallery-pagination">
+        <button type="button" id="btn-prev">« Anterior</button>
+        <span>Página <span id="gallery-page">1</span> de <span id="gallery-pages">1</span></span>
+        <button type="button" id="btn-next">Siguiente »</button>
+      </div>
+
+      <h3>Razas disponibles</h3>
+      <input type="search" id="breed-search" placeholder="Buscar raza...">
+      <div id="breed-cloud"></div>
+    </section>
+
+    <!-- ===================== QUIZ ===================== -->
+    <section id="section-quiz" class="app-section" hidden>
+      <h2>Adiviná la raza</h2>
+      <p>Mirá la foto y elegí la raza correcta.</p>
+
+      <div id="quiz-score">
+        <p>Aciertos: <span id="quiz-correct">0</span> / <span id="quiz-total">0</span></p>
+        <p>Racha actual: <span id="quiz-streak">0</span></p>
+        <p>Mejor racha: <span id="quiz-best">0</span></p>
+        <button type="button" id="btn-quiz-reset">Reiniciar puntaje</button>
+      </div>
+
+      <div id="quiz-status" role="status" aria-live="polite"></div>
+      <figure id="quiz-card" hidden>
+        <img id="quiz-image" alt="Perro a adivinar">
+        <div id="quiz-options"></div>
+        <p id="quiz-feedback"></p>
+        <button type="button" id="btn-quiz-next" hidden>Siguiente pregunta</button>
+      </figure>
+    </section>
+
+    <!-- ===================== FAVORITOS ===================== -->
+    <section id="section-favorites" class="app-section" hidden>
+      <h2>Mis favoritos</h2>
+      <p id="fav-empty">Todavía no guardaste ningún perro.</p>
+      <div id="fav-grid"></div>
+      <button type="button" id="btn-clear-favs">Vaciar favoritos</button>
+    </section>
+
+  </main>
+
+  <footer id="app-footer">
+    <p>TP N° 4 - Programación Orientada a la Web - Ingeniería en Sistemas</p>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
