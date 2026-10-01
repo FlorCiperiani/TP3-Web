@@ -1,14 +1,9 @@
-/* =========================================================
-   Ejercicio 1 - Adivina el número
-   ========================================================= */
-
 const MIN = 1;
 const MAX = 1000;
 const IMAGEN_PATRICIO_NORMAL = 'recursos/patricio.png';
 const IMAGEN_PATRICIO_GANA = 'recursos/patricio-Ja.png';
 const CLAVE_STATS = 'adivina-numero:estadisticas';
 
-/* ---------- Referencias al HTML ---------- */
 const $ = (id) => document.getElementById(id);
 const el = {
   tarjeta: $('tarjeta'),
@@ -61,7 +56,7 @@ let modoActual = 'jugador';
 let minM, maxM, intentosM, historialM, terminadaM, propuestaM;
 const CLAVE_STATS_MAQUINA = 'adivina-numero:estadisticas-maquina';
 
-/* ---------- Estado de la partida actual ---------- */
+/*Estado de la partida actual*/
 let secreto;
 let intentos;
 let minimo;      // límite inferior posible según las pistas
@@ -69,7 +64,7 @@ let maximo;      // límite superior posible según las pistas
 let historial;
 let terminada;
 
-/* ---------- Estadísticas de todo el juego (se guardan en el navegador) ---------- */
+/*Estadísticas de todo el juego (se guardan en el navegador)*/
 let stats = cargarStats();
 
 function cargarStats() {
@@ -114,7 +109,7 @@ function guardarStats() {
   } catch (e) { /* si no se puede guardar, el juego sigue funcionando */ }
 }
 
-/* ---------- Utilidades ---------- */
+/*Utilidades*/
 function numeroAleatorio() {
   return Math.floor(Math.random() * (MAX - MIN + 1)) + MIN;
 }
@@ -148,7 +143,7 @@ function animarContador(elemento) {
   elemento.classList.add('pop');
 }
 
-/* ---------- Dibujar en pantalla ---------- */
+/*Dibujar en pantalla*/
 function dibujarJuego() {
   el.intentos.textContent = intentos;
 
@@ -180,7 +175,7 @@ function dibujarStats(statsAMostrar) {
 function dibujarStatsActivo() {
   dibujarStats(modoActual === 'maquina' ? statsMaquina : stats);
 }
-/* ---------- Partida nueva / reiniciar ---------- */
+/*Partida nueva / reiniciar*/
 function nuevaPartida() {
   secreto = numeroAleatorio();
   intentos = 0;
@@ -203,7 +198,7 @@ function nuevaPartida() {
   el.numero.focus();
 }
 
-/* ---------- Intentar adivinar ---------- */
+/*Intentar adivinar*/
 function intentar(evento) {
   evento.preventDefault();
   if (terminada) return;
@@ -244,7 +239,7 @@ function intentar(evento) {
   dibujarJuego();
 }
 
-/* ---------- Ganar ---------- */
+/*Ganar*/
 function ganar() {
   terminada = true;
 
@@ -272,9 +267,7 @@ function ganar() {
   el.btnOtra.focus();
 }
 
-/* =========================================================
-   Modo: la máquina adivina
-   ========================================================= */
+/*Modo: la máquina adivina*/
 
 function cambiarModo(modo) {
   el.imagenPatricio.src = IMAGEN_PATRICIO_NORMAL;
@@ -397,7 +390,7 @@ function ganarMaquina() {
   elM.btnOtra.focus();
 }
 
-/* ---------- Confeti ---------- */
+/*Confeti*/
 const COLORES_CONFETI = ['#cf4f14', '#fbe9b0', '#ffc4d3', '#19b9b4', '#ffffff', '#f7c948'];
 let temporizadorConfeti;
 
@@ -427,7 +420,7 @@ function limpiarConfeti() {
   el.confeti.innerHTML = '';
 }
 
-/* ---------- Borrar estadísticas ---------- */
+/*Borrar estadísticas*/
 function borrarStats() {
   if (!confirm('¿Seguro que quieres borrar el mejor puntaje, las partidas y el promedio de este modo?')) return;
   if (modoActual === 'maquina') {
@@ -439,7 +432,7 @@ function borrarStats() {
   }
   dibujarStatsActivo();
 }
-/* ---------- Eventos ---------- */
+/*Eventos*/
 el.formulario.addEventListener('submit', intentar);
 el.btnReiniciar.addEventListener('click', nuevaPartida);
 el.btnOtra.addEventListener('click', nuevaPartida);
@@ -452,5 +445,5 @@ elM.btnAcerte.addEventListener('click', () => responderMaquina('acerto'));
 elM.btnReiniciar.addEventListener('click', nuevaPartidaMaquina);
 elM.btnOtra.addEventListener('click', nuevaPartidaMaquina);
 
-/* ---------- Arranque ---------- */
+/*Arranque*/
 nuevaPartida();

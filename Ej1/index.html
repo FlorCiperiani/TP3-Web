@@ -5,14 +5,13 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Ejercicio 1 - Adivina el número</title>
 
-  <!-- Tailwind-->
+  
   <link rel="stylesheet" href="style-tailwind.css">
   <!-- Tipografías -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
 
-  <!-- Estilos propios (animaciones, colores, detalles) -->
   <link rel="stylesheet" href="style.css">
 </head>
 
@@ -46,7 +45,7 @@
     <!-- En pantallas grandes: Patricio | juego | marcador. En celular: juego, marcador, Patricio -->
     <div class="mt-4 grid items-center gap-6 sm:mt-6 lg:grid-cols-[1fr_24rem_1fr]">
 
-      <!-- ============ Patricio ============ -->
+      <!--Patricio-->
       <aside class="order-3 flex flex-col items-center gap-3 lg:order-1">
         <p id="patricioDice" class="dialogo-patricio" aria-hidden="true">
           Ya tengo el número. ¡Adivina!
@@ -59,7 +58,7 @@
         </div>
       </aside>
 
-      <!-- ============ Tarjeta del juego ============ -->
+      <!--Tarjeta del juego-->
      <section id="tarjeta" class="tarjeta order-1 p-6 text-center sm:p-8 lg:order-2">
 
       <div id="botonesMaquina" class="selector-modo" role="tablist" aria-label="Elegí el modo de juego">
@@ -211,7 +210,7 @@
     </div>
     </section>
 
-      <!-- ============ Marcador ============ -->
+      <!--Marcador-->
       <aside class="order-2 lg:order-3">
         <div class="panel p-6">
           <h2 class="fuente-titulo text-2xl">Tu marcador</h2>

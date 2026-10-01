@@ -4,9 +4,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🐕</text></svg>">
   <title>Dog API</title>
-
   <link rel="stylesheet" href="style-tailwind.css">
   <link rel="stylesheet" href="style.css">
 </head>
@@ -22,97 +21,47 @@
 
 
   <!--HEADER-->
-  <header id="app-header"
-    class="border-b border-white/10 bg-slate-950/70 backdrop-blur-xl">
+  <header id="app-header" class="border-b border-white/10 bg-slate-950/70 backdrop-blur-xl">
+  <div class="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
 
-    <div class="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
+    <div class="flex flex-col items-center gap-4 text-center">
 
-      <!-- Título -->
-      <div class="flex flex-col gap-5 md:flex-row md:items-center md:justify-between">
+      <h1 class="text-3xl font-bold tracking-tight sm:text-4xl">
+        🐶 Dog API
+      </h1>
 
-        <div>
-          <div class="mb-3 flex items-center gap-3">
+      <h2 class="max-w-2xl text-slate-400">
+        Explorá razas, descubrí nuevos perros y poné a prueba tus conocimientos.
+      </h2>
 
-            <div>
+      <p class="text-sm text-slate-500">
+        Datos obtenidos desde
+        <a href="https://dog.ceo/dog-api/" target="_blank" rel="noopener"
+           class="font-medium text-indigo-400 transition hover:text-indigo-300 hover:underline">
+          Dog API
+        </a>
+      </p>
 
-              <h1 class="text-3xl font-bold tracking-tight sm:text-4xl">
-                🐶 Dog API
-              </h1>
-            </div>
-          </div>
-
-          <h2 class="max-w-2xl text-slate-400">
-            Explorá razas, descubrí nuevos perros y poné a prueba tus conocimientos.
-          </h2>
-
-          <p class="mt-2 text-sm text-slate-500">
-            Datos obtenidos desde
-            <a
-              href="https://dog.ceo/dog-api/"
-              target="_blank"
-              rel="noopener"
-              class="font-medium text-indigo-400 transition hover:text-indigo-300 hover:underline">
-              Dog API
-            </a>
-          </p>
-        </div>
-
-        <!-- Estadística -->
-        <div
-          id="stat-total"
-          class="rounded-2xl border border-white/10 bg-white/5 px-6 py-4 shadow-xl backdrop-blur-md">
-
-          <p class="text-xs font-semibold uppercase tracking-wider text-slate-500">
-            Razas disponibles:
-            <span id="total-breeds">...</span>
-          </p>
-
-        </div>
+      <div id="stat-total"
+           class="rounded-2xl border border-white/10 bg-white/5 px-6 py-4 shadow-xl backdrop-blur-md">
+        <p class="text-xs font-semibold uppercase tracking-wider text-slate-500">
+          Razas disponibles: <span id="total-breeds">...</span>
+        </p>
       </div>
-
-
-      <!--NAV -->
-      <nav
-        id="main-nav"
-        class="mx-auto mt-8 flex w-fit max-w-full flex-wrap justify-center gap-2 rounded-2xl border border-white/10 bg-white/5 p-2 backdrop-blur-md">
-
-        <button
-          type="button"
-          class="nav-btn active rounded-xl px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-white/10"
-          data-section="section-generator">
-          🐕 Generador
-        </button>
-
-        <button
-          type="button"
-          class="nav-btn rounded-xl px-4 py-2.5 text-sm font-semibold text-slate-400 transition hover:bg-white/10 hover:text-white"
-          data-section="section-gallery">
-          🖼️ Galería
-        </button>
-
-        <button
-          type="button"
-          class="nav-btn rounded-xl px-4 py-2.5 text-sm font-semibold text-slate-400 transition hover:bg-white/10 hover:text-white"
-          data-section="section-quiz">
-          🎯 Adiviná la raza
-        </button>
-
-        <button
-          type="button"
-          class="nav-btn rounded-xl px-4 py-2.5 text-sm font-semibold text-slate-400 transition hover:bg-white/10 hover:text-white"
-          data-section="section-favorites">
-          ❤️ Favoritos
-          <span
-            id="fav-count"
-            class="ml-1 rounded-full bg-white/10 px-2 py-0.5 text-xs">
-            (0)
-          </span>
-        </button>
-
-      </nav>
     </div>
-  </header>
 
+    <!-- NAV -->
+    <nav id="main-nav"
+         class="mx-auto mt-8 flex w-fit max-w-full flex-wrap justify-center gap-2 rounded-2xl border border-white/10 bg-white/5 p-2 backdrop-blur-md">
+      <button type="button" class="nav-btn active rounded-xl px-4 py-2.5 text-sm font-semibold transition hover:bg-white/10 hover:text-white" data-section="section-generator">🐕 Generador</button>
+      <button type="button" class="nav-btn rounded-xl px-4 py-2.5 text-sm font-semibold transition hover:bg-white/10 hover:text-white" data-section="section-gallery">🖼️ Galería</button>
+      <button type="button" class="nav-btn rounded-xl px-4 py-2.5 text-sm font-semibold transition hover:bg-white/10 hover:text-white" data-section="section-quiz">🎯 Adiviná la raza</button>
+      <button type="button" class="nav-btn rounded-xl px-4 py-2.5 text-sm font-semibold transition hover:bg-white/10 hover:text-white" data-section="section-favorites">
+        ❤️ Favoritos <span id="fav-count" class="ml-1 rounded-full bg-white/10 px-2 py-0.5 text-xs">(0)</span>
+      </button>
+    </nav>
+  </div>
+</header>
 
   <!--MAIN-->
   <main class="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
@@ -195,7 +144,7 @@
             type="button"
             id="btn-generate"
             class="flex-1 rounded-xl bg-gradient-to-r from-indigo-500 to-purple-600 px-5 py-3 font-semibold text-white shadow-lg shadow-indigo-500/20 transition hover:-translate-y-0.5 hover:from-indigo-400 hover:to-purple-500 disabled:cursor-not-allowed disabled:opacity-50">
-            🐾 Obtener perro aleatorio
+            🦴 Obtener perro aleatorio
           </button>
 
           <button
@@ -220,7 +169,7 @@
       <!-- Resultados -->
       <div
         id="generator-results"
-        class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        class="flex flex-wrap justify-center gap-6">
       </div>
 
 
@@ -260,9 +209,7 @@
     </section>
 
 
-    <!-- ===================================================
-         GALERÍA
-         =================================================== -->
+    <!--GALERÍA-->
     <section
       id="section-gallery"
       class="app-section"
@@ -422,9 +369,7 @@
     </section>
 
 
-    <!-- ===================================================
-         QUIZ
-         =================================================== -->
+    <!--QUIZ-->
     <section
       id="section-quiz"
       class="app-section"
@@ -488,12 +433,12 @@
         hidden
         class="mx-auto max-w-3xl overflow-hidden rounded-3xl border border-white/10 bg-white/5 shadow-2xl backdrop-blur-xl">
 
-        <div class="relative overflow-hidden bg-slate-900">
+        <div class="flex items-center justify-center overflow-hidden bg-slate-900">
 
           <img
             id="quiz-image"
             alt="Perro a adivinar"
-            class="h-[320px] w-full object-cover sm:h-[450px]">
+            class="h-[320px] w-auto max-w-full object-contain sm:h-[450px]">
 
         </div>
 
@@ -529,9 +474,7 @@
     </section>
 
 
-    <!-- ===================================================
-         FAVORITOS
-         =================================================== -->
+    <!--FAVORITOS-->
     <section
       id="section-favorites"
       class="app-section"
@@ -577,18 +520,6 @@
     </section>
 
   </main>
-
-
-  <!-- =====================================================
-       FOOTER
-       ===================================================== -->
-  <footer
-    id="app-footer"
-    class="mt-12 border-t border-white/10 bg-slate-950/50">
-
-
-  </footer>
-
 
   <script src="script.js"></script>
 

@@ -1,7 +1,4 @@
 /* =========================================================
- * TP4 - Actividad 3: Manejo de API (Dog API - dog.ceo)
- * Base URL: https://dog.ceo/api
- *
  * Endpoints utilizados:
  *   GET /breeds/list/all                        -> todas las razas y sub-razas
  *   GET /breeds/image/random/:n                 -> n perros aleatorios (máx. 50)
@@ -17,18 +14,18 @@ const LS_HISTORY = "dog_history";
 const LS_BEST_STREAK = "dog_best_streak";
 const MAX_HISTORY = 12;
 
-/* ----------------------- ESTADO ----------------------- */
+/* ESTADO */
 const state = {
-  breeds: {},            // { hound: ["afghan", "basset", ...], akita: [] }
-  folders: [],           // ["hound-afghan", "akita", ...] (claves tal como aparecen en la URL de las imágenes)
-  results: [],           // URLs mostradas en el generador
-  favorites: loadStorage(LS_FAVS),   // [url]
-  history: loadStorage(LS_HISTORY),  // [url]
+  breeds: {},            
+  folders: [],           
+  results: [],           
+  favorites: loadStorage(LS_FAVS),  
+  history: loadStorage(LS_HISTORY), 
   gallery: { page: 0, limit: 12, breed: "", sub: "", all: [], random: true },
   quiz: { url: "", answer: "", answered: false, correct: 0, total: 0, streak: 0, best: Number(localStorage.getItem(LS_BEST_STREAK)) || 0 },
 };
 
-/* ----------------------- HELPERS ----------------------- */
+
 const $ = (id) => document.getElementById(id);
 
 function loadStorage(key) {
@@ -48,7 +45,6 @@ function saveStorage(key, value) {
   }
 }
 
-// La Dog API responde { message: ..., status: "success" | "error" }
 async function fetchDog(path) {
   const res = await fetch(`${API}${path}`);
   const data = await res.json().catch(() => ({}));
@@ -62,13 +58,12 @@ function capitalize(text) {
   return text.replace(/\b\w/g, (c) => c.toUpperCase());
 }
 
-// URL: https://images.dog.ceo/breeds/hound-afghan/n02088094_1003.jpg -> "hound-afghan"
+
 function folderFromUrl(url) {
   const m = url.match(/\/breeds\/([^/]+)\//);
   return m ? m[1] : "";
 }
 
-// "hound-afghan" -> "Afghan Hound" | "akita" -> "Akita"
 function labelFromFolder(folder) {
   if (!folder) return "Desconocida";
   const [breed, ...sub] = folder.split("-");
@@ -104,7 +99,7 @@ function debounce(fn, ms) {
   };
 }
 
-/* ----------------------- NAVEGACIÓN ----------------------- */
+/* NAVEGACIÓN */
 function showSection(sectionId) {
   document.querySelectorAll(".app-section").forEach((s) => {
     s.hidden = s.id !== sectionId;
@@ -117,7 +112,7 @@ function showSection(sectionId) {
   if (sectionId === "section-favorites") renderFavorites();
 }
 
-/* ----------------------- RAZAS ----------------------- */
+/* RAZAS */
 async function loadBreeds() {
   try {
     state.breeds = await fetchDog("/breeds/list/all");
@@ -191,7 +186,7 @@ function renderBreedCloud() {
     });
 }
 
-/* ----------------------- GENERADOR ----------------------- */
+/* GENERADOR */
 function buildRandomPath(breed, sub, count) {
   if (breed && sub) return `/breed/${breed}/${sub}/images/random/${count}`;
   if (breed) return `/breed/${breed}/images/random/${count}`;
@@ -231,7 +226,7 @@ function resetOptions() {
   $("opt-count").value = "1";
 }
 
-/* ----------------------- TARJETA REUTILIZABLE ----------------------- */
+/* TARJETA REUTILIZABLE */
 function createDogCard(url) {
   const card = document.createElement("article");
   card.className = "dog-card";
@@ -280,7 +275,7 @@ function createDogCard(url) {
   return card;
 }
 
-/* ----------------------- HISTORIAL ----------------------- */
+/* HISTORIAL */
 function addToHistory(url) {
   state.history = [url, ...state.history.filter((u) => u !== url)].slice(0, MAX_HISTORY);
   saveStorage(LS_HISTORY, state.history);
@@ -311,13 +306,13 @@ function renderHistory() {
   });
 }
 
-/* ----------------------- FAVORITOS ----------------------- */
+/* FAVORITOS */
 function toggleFavorite(url) {
   if (isFavorite(url)) state.favorites = state.favorites.filter((u) => u !== url);
   else state.favorites.push(url);
   saveStorage(LS_FAVS, state.favorites);
   updateFavCount();
-  // Se redibuja todo lo que muestra botones de favorito (tiempo real)
+  // Se redibuja todo lo que muestra botones de favorito
   renderResults();
   renderGallery();
   renderFavorites();
@@ -335,7 +330,7 @@ function renderFavorites() {
   state.favorites.forEach((url) => grid.appendChild(createDogCard(url)));
 }
 
-/* ----------------------- GALERÍA ----------------------- */
+/* GALERÍA */
 async function loadGallery() {
   const g = state.gallery;
   setStatus("gallery-status", "Cargando galería...");
@@ -388,7 +383,7 @@ function renderGallery() {
   }
 }
 
-/* ----------------------- QUIZ ----------------------- */
+/* QUIZ */
 async function loadQuizQuestion() {
   const q = state.quiz;
   q.answered = false;
@@ -463,10 +458,10 @@ function renderQuizScore() {
   $("quiz-correct").textContent = q.correct;
   $("quiz-total").textContent = q.total;
   $("quiz-streak").textContent = q.streak;
-  $("quiz-best").textContent = q.best;
+  $("quiz-best-streak").textContent = q.best;
 }
 
-/* ----------------------- EVENTOS ----------------------- */
+/* EVENTOS */
 function bindEvents() {
   document.querySelectorAll(".nav-btn").forEach((btn) => {
     btn.addEventListener("click", () => showSection(btn.dataset.section));
@@ -541,7 +536,7 @@ function bindEvents() {
   });
 }
 
-/* ----------------------- INICIO ----------------------- */
+/* INICIO */
 document.addEventListener("DOMContentLoaded", async () => {
   bindEvents();
   updateFavCount();
