@@ -26,7 +26,7 @@
   --glass-line: rgb(120 180 230 / 0.30);
   --line:       rgb(120 180 230 / 0.30);
 
-  /* gradiente de botones (igual al botón activo del header) */
+  /* gradiente de botones*/
   --btn-grad:       linear-gradient(135deg, var(--sky-500), var(--navy-500));
   --btn-grad-hover: linear-gradient(135deg, var(--sky-400), var(--sky-500));
   --btn-border:     rgb(160 205 240 / 0.45);
@@ -43,7 +43,7 @@
 }
 
 /* =========================================================
-   FONDO GENERAL (arena + foto en toda la página)
+   FONDO GENERAL
    ========================================================= */
 body.bg-slate-950 {
   background: linear-gradient(160deg, var(--tan-lighter) 0%, var(--tan) 55%, var(--sand-dark) 100%);
@@ -51,7 +51,7 @@ body.bg-slate-950 {
   color: var(--ink);
 }
 
-/* foto semitransparente en TODO el fondo (el header es translúcido y la deja ver) */
+/* foto semitransparente en el fondo */
 body.bg-slate-950::before {
   content: "";
   position: fixed;
@@ -68,7 +68,7 @@ body.bg-slate-950::before {
 .bg-blue-600\/10   { background-color: rgb(255 244 230 / 0.22); }
 
 /* =========================================================
-   HEADER (azul oscuro translúcido, textos blancos)
+   HEADER
    ========================================================= */
 #app-header {
   background: linear-gradient(180deg, rgb(4 38 70 / 0.80), rgb(2 24 44 / 0.88));
@@ -114,8 +114,7 @@ body.bg-slate-950::before {
 }
 
 /* =========================================================
-   TEXTOS SOBRE LA ARENA (fuera de los paneles)
-   Azul noche + halo claro para máximo contraste
+   TEXTOS SOBRE LA ARENA
    ========================================================= */
 main h2,
 main .text-slate-300,
@@ -149,7 +148,7 @@ main section > div > p {
 }
 
 /* =========================================================
-   GLASS AZUL (paneles)
+   GLASS AZUL
    ========================================================= */
 .bg-white\/5 {
   background-color: var(--glass);
@@ -167,7 +166,7 @@ main section > div > p {
 .bg-white\/5 .text-slate-400 { color: var(--text-soft); }
 .bg-white\/5 .text-slate-500 { color: var(--text-muted); }
 
-/* Dentro de los paneles azules el texto sigue claro (pisa las reglas de la arena) */
+/* Dentro de los paneles azules el texto sigue claro */
 main .bg-white\/5 h2,
 main .bg-white\/5 h3 { color: #fff; text-shadow: none; }
 main .bg-white\/5 .text-slate-300,
@@ -182,7 +181,7 @@ main .bg-white\/5 .text-slate-500 { color: var(--text-muted); text-shadow: none;
 #main-nav { color: inherit; }
 
 /* =========================================================
-   INPUTS, SELECTS Y BUSCADOR (azul noche)
+   INPUTS, SELECTS Y BUSCADOR
    ========================================================= */
 .control-group select,
 #breed-search {
@@ -200,7 +199,7 @@ main .bg-white\/5 .text-slate-500 { color: var(--text-muted); text-shadow: none;
 select option { background: var(--navy-900); color: #fff; }
 
 /* =========================================================
-   TODOS LOS BOTONES (mismo estilo que el botón activo del header)
+   TODOS LOS BOTONES
    ========================================================= */
 #btn-generate,
 #btn-quiz-next,

@@ -1,12 +1,54 @@
-﻿body {
+﻿:root {
+
+  --c-sage:       143 175 145;  /* #8FAF91 - verde salvia */
+  --c-green:       63 125  90;  /* #3F7D5A - verde natural */
+  --c-green-hi:    91 153 112;  /* verde vivo */
+  --c-olive:      113 131  85;  /* #718355 - oliva */
+  --c-forest:      31  77  58;  /* #1F4D3A - verde bosque */
+  --c-forest-hi:   52 111  79;  /* verde bosque claro */
+  --c-black:       11  15  12;  /* #0B0F0C */
+  --c-black-soft:  18  25  20;  /* negro verdoso */
+  --c-white:      229 232 225;  /* #E5E8E1 */
+  --c-titulo: 11, 30, 6;
+  --c-subtitle: 24, 46, 18;
+
+  /* Fondo */
+  --c-bg-1:        155, 223, 138;
+  --c-bg-2:        42  76  54;
+}
+
+
+/* =========================================================
+   GENERAL
+   ========================================================= */
+
+body {
   margin: 0;
   min-height: 100vh;
+
   background:
-    radial-gradient(circle at top left, rgba(168, 85, 247, 0.25), transparent 30%),
-    radial-gradient(circle at top right, rgba(34, 211, 238, 0.2), transparent 28%),
-    radial-gradient(circle at bottom, rgba(59, 130, 246, 0.18), transparent 35%),
-    linear-gradient(135deg, #020617 0%, #0f172a 30%, #111827 100%);
-  color: #e2e8f0;
+    radial-gradient(
+      circle at top left,
+      rgb(var(--c-green-hi) / 0.18),
+      transparent 32%
+    ),
+    radial-gradient(
+      circle at top right,
+      rgb(var(--c-sage) / 0.12),
+      transparent 30%
+    ),
+    radial-gradient(
+      circle at bottom,
+      rgb(var(--c-forest-hi) / 0.16),
+      transparent 38%
+    ),
+    linear-gradient(
+      135deg,
+      rgb(var(--c-bg-1)) 0%,
+      rgb(var(--c-bg-2)) 100%
+    );
+
+  color: rgb(var(--c-white));
   font-family: "Segoe UI", sans-serif;
 }
 
@@ -30,24 +72,46 @@ button:disabled {
   cursor: not-allowed;
   opacity: 0.5;
 }
+
+
+/* =========================================================
+   GLASS
+   ========================================================= */
+
 .glass-panel {
-  background: rgba(15, 23, 42, 0.55);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgb(var(--c-black) / 0.68);
+
+  border: 1px solid rgb(var(--c-sage) / 0.14);
+
   border-radius: 1.5rem;
-  box-shadow: 0 25px 60px rgba(15, 23, 42, 0.7);
+
+  box-shadow:
+    0 25px 60px rgb(0 0 0 / 0.55);
+
   backdrop-filter: blur(24px);
   -webkit-backdrop-filter: blur(24px);
 }
 
 .accent-ring {
-  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.07);
+  box-shadow:
+    inset 0 0 0 1px rgb(var(--c-green-hi) / 0.18);
 }
+
+
+/* =========================================================
+   CONTENEDOR PRINCIPAL
+   ========================================================= */
 
 .turnero-shell {
   max-width: 72rem;
   margin: 0 auto;
   padding: 0.75rem 1rem;
 }
+
+
+/* =========================================================
+   ENCABEZADO
+   ========================================================= */
 
 .turnero-header {
   margin-bottom: 0.75rem;
@@ -56,23 +120,37 @@ button:disabled {
 
 .turnero-title {
   margin: 0;
-  color: #fff;
+
+  color: rgb(var(--c-titulo));
+
   font-size: clamp(2rem, 4vw, 2.5rem);
   font-weight: 900;
+
   letter-spacing: -0.025em;
   line-height: 1.1;
+
+  text-shadow:
+    0 0 28px rgb(var(--c-green-hi) / 0.45);
 }
 
 .turnero-subtitle {
   max-width: 42rem;
   margin: 0.5rem auto 0;
-  color: #cbd5e1;
-  font-size: 1rem;
+
+  color: rgb(var(--c-subtitle));
+
+  font-size: 1.25rem;
   line-height: 1.4;
 }
 
+
+/* =========================================================
+   MENSAJES
+   ========================================================= */
+
 .turnero-action-message {
   margin: 0;
+
   font-size: 0.8rem;
   line-height: 1.25;
 }
@@ -88,16 +166,21 @@ button:disabled {
 }
 
 .turnero-message-success {
-  color: #6ee7b7;
+  color: #86efac;
 }
 
 .turnero-message-danger {
-  color: #fda4af;
+  color: #fca5a5;
 }
 
 .turnero-message-warning {
-  color: #fcd34d;
+  color: #d9e58c;
 }
+
+
+/* =========================================================
+   LAYOUT
+   ========================================================= */
 
 .turnero-layout {
   display: grid;
@@ -108,6 +191,11 @@ button:disabled {
 .turnero-panel {
   padding: 1rem;
 }
+
+
+/* =========================================================
+   PANELES
+   ========================================================= */
 
 .turnero-panel-header {
   margin-bottom: 0.75rem;
@@ -122,9 +210,15 @@ button:disabled {
 
 .turnero-panel-copy {
   margin-top: 0.375rem;
-  color: #cbd5e1;
+  color: #fff;
   font-size: 0.875rem;
 }
+
+
+
+/* =========================================================
+   FORMULARIO
+   ========================================================= */
 
 .turnero-form {
   display: flex;
@@ -140,43 +234,73 @@ button:disabled {
 .turnero-label {
   display: block;
   margin-bottom: 0.375rem;
-  color: #e2e8f0;
+  color: #fff;
   font-size: 0.875rem;
   font-weight: 500;
 }
 
+
+/* =========================================================
+   INPUTS
+   ========================================================= */
+
 .turnero-input {
   width: 100%;
   border-radius: 1rem;
-  background: rgba(2, 6, 23, 0.6);
+  background: rgb(var(--c-black-soft) / 0.85);
   padding: 0.625rem 0.875rem;
   color: #fff;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid rgb(var(--c-sage) / 0.16);
   outline: none;
   transition: border-color 0.15s ease, box-shadow 0.15s ease;
 }
 
+
+
+/* Límite inferior */
 .turnero-input-cyan {
-  border-color: rgba(34, 211, 238, 0.3);
-  box-shadow: inset 0 0 0 1px rgba(34, 211, 238, 0.12);
+  border-color: rgb(var(--c-green-hi) / 0.6);
+
+  box-shadow:
+    inset 0 0 0 1px rgb(var(--c-green-hi) / 0.18);
 }
 
+
+/* Límite superior */
 .turnero-input-fuchsia {
-  border-color: rgba(232, 121, 249, 0.3);
-  box-shadow: inset 0 0 0 1px rgba(232, 121, 249, 0.12);
+  border-color: rgb(var(--c-olive) / 0.7);
+
+  box-shadow:
+    inset 0 0 0 1px rgb(var(--c-olive) / 0.18);
 }
 
 .turnero-input:focus {
-  border-color: rgba(103, 232, 249, 0.95);
-  box-shadow: 0 0 0 2px rgba(34, 211, 238, 0.15);
+  border-color: rgb(var(--c-green-hi));
+
+  box-shadow:
+    0 0 0 3px rgb(var(--c-green-hi) / 0.22);
 }
+
+
+/* =========================================================
+   BOTONES GENERALES
+   ========================================================= */
 
 .turnero-btn,
 .turnero-btn-generate {
   border: 1px solid transparent;
+
   border-radius: 1rem;
+
   font-weight: 600;
-  transition: transform 0.15s ease, opacity 0.15s ease, background-color 0.15s ease;
+
+  cursor: pointer;
+
+  transition:
+    transform 0.15s ease,
+    opacity 0.15s ease,
+    background-color 0.15s ease,
+    box-shadow 0.15s ease;
 }
 
 .turnero-btn:hover,
@@ -184,139 +308,260 @@ button:disabled {
   transform: translateY(-1px);
 }
 
+
+/* =========================================================
+   GUARDAR LÍMITES
+   ========================================================= */
+
 .turnero-btn-primary {
   width: 100%;
-  background: rgba(34, 211, 238, 0.15);
-  border-color: rgba(103, 232, 249, 0.4);
-  color: #cffafe;
+
+  background: rgb(var(--c-green) / 0.28);
+
+  border-color: rgb(var(--c-green-hi) / 0.7);
+
+  color: #b7e4c7;
+
   padding: 0.625rem 0.875rem;
 }
+
+.turnero-btn-primary:hover {
+  background: rgb(var(--c-green) / 0.45);
+
+  box-shadow:
+    0 8px 20px rgb(var(--c-green) / 0.2);
+}
+
+
+/* =========================================================
+   REINICIAR
+   ========================================================= */
 
 .turnero-btn-danger {
   width: 100%;
-  background: rgba(251, 113, 133, 0.1);
-  border-color: rgba(253, 164, 175, 0.4);
-  color: #ffe4e6;
+
+  background: rgb(127 29 29 / 0.2);
+
+  border-color: rgb(248 113 113 / 0.55);
+
+  color: #fecaca;
+
   padding: 0.625rem 0.875rem;
 }
 
+.turnero-btn-danger:hover {
+  background: rgb(127 29 29 / 0.35);
+}
+
+
+/* =========================================================
+   DIVISOR
+   ========================================================= */
+
 .turnero-divider {
   height: 1px;
+
   margin: 0.75rem 0;
-  background: linear-gradient(to right, transparent, rgba(255, 255, 255, 0.15), transparent);
+
+  background:
+    linear-gradient(
+      to right,
+      transparent,
+      rgb(var(--c-green-hi) / 0.35),
+      transparent
+    );
 }
+
+
+/* =========================================================
+   PANEL DEL NÚMERO
+   ========================================================= */
 
 .turnero-panel-display {
   display: flex;
+
   justify-content: center;
+
   text-align: center;
 }
 
 .turnero-display-wrap {
   display: flex;
+
   height: 100%;
+
   flex-direction: column;
+
   justify-content: center;
+
   width: 100%;
 }
 
 .turnero-display-label {
   margin: 0 0 0.5rem;
-  color: #c4b5fd;
+  color: #fff;
   font-size: 0.75rem;
   font-weight: 700;
   letter-spacing: 0.3em;
   text-transform: uppercase;
 }
 
+
+/* =========================================================
+   NÚMERO PRINCIPAL
+   ========================================================= */
+
 .turnero-number {
-  background-image: linear-gradient(to right, #67e8f9, #c4b5fd, #f9a8d4);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
+  color: #fff;
   font-size: clamp(2.5rem, 9vw, 3.5rem);
   font-weight: 900;
   letter-spacing: -0.025em;
   line-height: 1;
-  text-shadow: 0 0 24px rgba(168, 85, 247, 0.45);
+  filter: drop-shadow(0 0 18px rgb(var(--c-green-hi) / 0.4));
 }
 
 .turnero-range {
   margin-top: 0.5rem;
-  color: #cbd5e1;
+  color: #fff;
   font-size: 0.875rem;
 }
 
+
+/* =========================================================
+   GENERAR NÚMERO
+   ========================================================= */
+
 .turnero-btn-generate {
-  background: linear-gradient(to right, #22d3ee, #8b5cf6, #d946ef);
-  color: #fff;
+  background:
+    linear-gradient(
+      to right,
+      rgb(var(--c-sage)),
+      rgb(var(--c-green-hi)),
+      rgb(var(--c-olive))
+    );
+
+  color: #07100a;
+
   padding: 0.75rem 1rem;
-  box-shadow: 0 10px 15px rgba(91, 33, 182, 0.35);
+
+  box-shadow:
+    0 10px 25px rgb(var(--c-green) / 0.4);
 }
+
+.turnero-btn-generate:hover {
+  box-shadow:
+    0 14px 32px rgb(var(--c-green) / 0.55);
+}
+
+
+/* =========================================================
+   CONTADOR
+   ========================================================= */
 
 .turnero-counter {
   display: inline-flex;
+
   align-items: center;
   justify-content: center;
+
   gap: 0.75rem;
+
   margin-top: 0.75rem;
+
   align-self: center;
+
   border-radius: 9999px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  background: rgba(2, 6, 23, 0.5);
+
+  border: 1px solid rgb(var(--c-green-hi) / 0.3);
+
+  background: rgb(var(--c-black-soft) / 0.7);
+
   padding: 0.5rem 1rem;
-  color: #e2e8f0;
+
+  color: rgb(var(--c-white));
+
   font-size: 0.875rem;
 }
 
 .turnero-counter-number {
-  color: #67e8f9;
+  color: rgb(var(--c-sage));
+
   font-size: 1.125rem;
+
   font-weight: 700;
 }
 
+
+/* =========================================================
+   HISTORIAL
+   ========================================================= */
+
 .turnero-history {
   margin-top: 0.75rem;
+
   padding: 1rem;
 }
 
 .turnero-history-head {
   display: flex;
+
   flex-wrap: wrap;
+
   align-items: center;
+
   justify-content: space-between;
+
   gap: 0.75rem;
 }
 
 .turnero-historial {
   display: flex;
+
   flex-wrap: wrap;
+
   gap: 0.75rem;
+
   min-height: 1.5rem;
+
   margin-top: 0.5rem;
 }
 
 .turnero-historial span {
   display: inline-flex;
+
   min-width: 2.75rem;
+
   justify-content: center;
   align-items: center;
+
   border-radius: 9999px;
-  border: 1px solid rgba(196, 181, 253, 0.4);
-  background: rgba(139, 92, 246, 0.1);
+
+  border: 1px solid rgb(var(--c-green-hi) / 0.65);
+
+  background: rgb(var(--c-green) / 0.2);
+
   padding: 0.375rem 0.625rem;
-  color: #f5f3ff;
+
+  color: rgb(var(--c-white));
+
   font-size: 0.875rem;
+
   font-weight: 700;
 }
 
 .turnero-empty {
   margin: 0;
-  color: #cbd5e1;
+  color: #fff;
   font-size: 0.875rem;
 }
 
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
 @media (min-width: 640px) {
+
   .turnero-shell {
     padding: 0.75rem 1.5rem;
   }
@@ -334,6 +579,9 @@ button:disabled {
   }
 
   .turnero-input-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-columns: repeat(
+      2,
+      minmax(0, 1fr)
+    );
   }
 }
