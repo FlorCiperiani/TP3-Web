@@ -1,8 +1,250 @@
-/* ---------- Navegación ---------- */
-.nav-btn { color: #94a3b8; }
-.nav-btn.active { background: rgb(255 255 255 / 0.1); color: #fff; }
+/* =========================================================
+   PALETA
+   ========================================================= */
+:root {
+  --navy-950: #021a30;
+  --navy-900: #03213a;
+  --navy-800: #042a4a;
+  --navy-700: #05345a;
+  --navy-500: #0a4a7d;
+  --sky-500:  #2a8fd6;
+  --sky-400:  #4aa8e8;
 
-/* ---------- Quiz: puntaje ---------- */
+  --tan:         #c4966e;
+  --tan-light:   #ddbb96;
+  --tan-lighter: #e0c3a0;
+  --sand-dark:   #a97c52;
+
+  --text:       #f4f8fc;
+  --text-soft:  #dbe6f1;
+  --text-muted: #b4c6d9;
+
+  --ink:      #2b1b10;
+  --ink-soft: #3a2616;
+
+  --glass:      rgb(5 52 90 / 0.78);
+  --glass-line: rgb(120 180 230 / 0.30);
+  --line:       rgb(120 180 230 / 0.30);
+
+  /* gradiente de botones (igual al botón activo del header) */
+  --btn-grad:       linear-gradient(135deg, var(--sky-500), var(--navy-500));
+  --btn-grad-hover: linear-gradient(135deg, var(--sky-400), var(--sky-500));
+  --btn-border:     rgb(160 205 240 / 0.45);
+
+  /* favoritos */
+  --btn-favorite:       #b91c1c;  /* rojo base (Quitar de favoritos) */
+  --btn-favorite-hover: #dc2626;  /* rojo claro */
+  --btn-add-hover:      #0b7024;  /* verde al pasar el mouse en Agregar */
+
+  /* sombras */
+  --shadow-sm: 0 2px 8px rgb(0 0 0 / 0.35);
+  --shadow-md: 0 8px 22px rgb(0 0 0 / 0.40);
+  --shadow-lg: 0 18px 45px rgb(0 0 0 / 0.55);
+}
+
+/* =========================================================
+   FONDO GENERAL (arena + foto en toda la página)
+   ========================================================= */
+body.bg-slate-950 {
+  background: linear-gradient(160deg, var(--tan-lighter) 0%, var(--tan) 55%, var(--sand-dark) 100%);
+  background-attachment: fixed;
+  color: var(--ink);
+}
+
+/* foto semitransparente en TODO el fondo (el header es translúcido y la deja ver) */
+body.bg-slate-950::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -20;
+  background: url("recursos/pet.png") center / cover no-repeat;
+  opacity: 0.30;
+  pointer-events: none;
+}
+
+/* círculos decorativos: sin azul */
+.bg-indigo-600\/20 { background-color: rgb(255 244 230 / 0.35); }
+.bg-purple-600\/20 { background-color: rgb(150 106 69 / 0.25); }
+.bg-blue-600\/10   { background-color: rgb(255 244 230 / 0.22); }
+
+/* =========================================================
+   HEADER (azul oscuro translúcido, textos blancos)
+   ========================================================= */
+#app-header {
+  background: linear-gradient(180deg, rgb(4 38 70 / 0.80), rgb(2 24 44 / 0.88));
+  border-bottom: 1px solid var(--line);
+  box-shadow: 0 10px 35px rgb(0 0 0 / 0.50);
+  color: #fff;
+}
+#app-header h1,
+#app-header h2,
+#app-header p,
+#app-header span,
+#app-header a,
+#app-header .text-slate-400,
+#app-header .text-slate-500 {
+  color: #fff;
+}
+#app-header a:hover { color: #fff; text-decoration: underline; }
+#app-header h1,
+#app-header h2 { text-shadow: 0 2px 8px rgb(0 0 0 / 0.55); }
+
+#stat-total {
+  background: linear-gradient(135deg, rgb(10 74 125 / 0.55), rgb(3 33 58 / 0.75));
+  border-color: var(--line);
+  box-shadow: var(--shadow-md);
+}
+
+/* ---------- Navegación ---------- */
+#main-nav {
+  background: rgb(3 33 58 / 0.75);
+  border-color: var(--line);
+  box-shadow: var(--shadow-md);
+}
+.nav-btn { color: #fff; }
+.nav-btn:hover { background: rgb(74 168 232 / 0.22); color: #fff; }
+.nav-btn.active {
+  background: var(--btn-grad);
+  color: #fff;
+  box-shadow: 0 4px 14px rgb(42 143 214 / 0.50);
+}
+.nav-btn.active #fav-count {
+  background: rgb(255 255 255 / 0.22);
+  color: #fff;
+}
+
+/* =========================================================
+   TEXTOS SOBRE LA ARENA (fuera de los paneles)
+   Azul noche + halo claro para máximo contraste
+   ========================================================= */
+main h2,
+main .text-slate-300,
+main .text-slate-400,
+main .text-slate-500 {
+  color: var(--navy-950);
+}
+
+/* Títulos de sección */
+main section > div > h2 {
+  color: var(--navy-950);
+  font-weight: 800;
+  text-shadow: 0 1px 0 rgb(255 255 255 / 0.55), 0 2px 10px rgb(255 244 230 / 0.8);
+}
+
+/* Subtítulos de sección */
+main section > div > p {
+  color: var(--navy-900);
+  font-weight: 500;
+  text-shadow: 0 1px 6px rgb(255 244 230 / 0.7);
+}
+
+/* Mensajes de estado e información */
+.text-indigo-300,
+.text-purple-300,
+.text-amber-300,
+#gallery-info {
+  color: var(--navy-950);
+  font-weight: 700;
+  text-shadow: 0 1px 6px rgb(255 244 230 / 0.7);
+}
+
+/* =========================================================
+   GLASS AZUL (paneles)
+   ========================================================= */
+.bg-white\/5 {
+  background-color: var(--glass);
+  color: var(--text);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  box-shadow: var(--shadow-lg);
+}
+.bg-white\/10 { background-color: rgb(120 180 230 / 0.18); }
+.border-white\/10 { border-color: var(--glass-line); }
+
+.bg-white\/5 h2,
+.bg-white\/5 h3 { color: #fff; }
+.bg-white\/5 .text-slate-300 { color: var(--text-soft); }
+.bg-white\/5 .text-slate-400 { color: var(--text-soft); }
+.bg-white\/5 .text-slate-500 { color: var(--text-muted); }
+
+/* Dentro de los paneles azules el texto sigue claro (pisa las reglas de la arena) */
+main .bg-white\/5 h2,
+main .bg-white\/5 h3 { color: #fff; text-shadow: none; }
+main .bg-white\/5 .text-slate-300,
+main .bg-white\/5 .text-slate-400 { color: var(--text-soft); text-shadow: none; }
+main .bg-white\/5 .text-slate-500 { color: var(--text-muted); text-shadow: none; }
+
+#gallery-pagination > span { box-shadow: var(--shadow-md); color: var(--text-soft); }
+#gallery-pagination .text-white { color: #fff; }
+
+/* el header no usa los overrides de paneles */
+#stat-total,
+#main-nav { color: inherit; }
+
+/* =========================================================
+   INPUTS, SELECTS Y BUSCADOR (azul noche)
+   ========================================================= */
+.control-group select,
+#breed-search {
+  background-color: var(--navy-900);
+  border: 1px solid var(--btn-border);
+  color: #fff;
+  box-shadow: var(--shadow-sm);
+}
+.control-group select:focus,
+#breed-search:focus {
+  border-color: var(--sky-400);
+  box-shadow: 0 0 0 3px rgb(42 143 214 / 0.40), var(--shadow-sm);
+}
+#breed-search::placeholder { color: #9fb4c9; }
+select option { background: var(--navy-900); color: #fff; }
+
+/* =========================================================
+   TODOS LOS BOTONES (mismo estilo que el botón activo del header)
+   ========================================================= */
+#btn-generate,
+#btn-quiz-next,
+#btn-gallery-reload,
+#btn-reset-options,
+#btn-quiz-reset,
+#btn-clear-history,
+#btn-clear-favs,
+#btn-prev,
+#btn-next,
+.dog-card-actions button,
+.dog-card-actions a,
+.breed-chip,
+.history-item,
+.quiz-option {
+  background: var(--btn-grad);
+  border: 1px solid var(--btn-border);
+  color: #fff;
+  box-shadow: var(--shadow-md);
+  transition: background 0.15s, box-shadow 0.15s, transform 0.15s;
+}
+
+#btn-generate:hover:not(:disabled),
+#btn-quiz-next:hover,
+#btn-gallery-reload:hover,
+#btn-reset-options:hover,
+#btn-quiz-reset:hover,
+#btn-clear-history:hover,
+#btn-clear-favs:hover,
+#btn-prev:hover:not(:disabled),
+#btn-next:hover:not(:disabled),
+.dog-card-actions button:hover,
+.dog-card-actions a:hover,
+.breed-chip:hover,
+.history-item:hover,
+.quiz-option:hover:not(:disabled) {
+  background: var(--btn-grad-hover);
+  color: #fff;
+  box-shadow: var(--shadow-lg);
+}
+
+/* =========================================================
+   QUIZ
+   ========================================================= */
 .quiz-stat {
   display: flex;
   flex-wrap: wrap;
@@ -11,14 +253,14 @@
   gap: 0.35rem;
   padding: 1rem;
   border-radius: 1rem;
-  border: 1px solid rgb(255 255 255 / 0.1);
-  background: rgb(255 255 255 / 0.05);
+  border: 1px solid var(--glass-line);
+  background: linear-gradient(135deg, var(--navy-500), var(--navy-700));
   font-size: 0.875rem;
-  color: #cbd5e1;
+  color: var(--text-soft);
+  box-shadow: var(--shadow-lg);
 }
 .quiz-stat strong { color: #fff; font-size: 1.125rem; }
 
-/* ---------- Quiz: imagen centrada ---------- */
 #quiz-image {
   display: block;
   margin-inline: auto;
@@ -30,39 +272,38 @@
 @media (min-width: 640px) {
   #quiz-image { height: 450px; }
 }
+#quiz-card { box-shadow: var(--shadow-lg); }
+#quiz-card .bg-slate-900 { background-color: var(--navy-900); }
 
-/* ---------- Quiz: opciones ---------- */
 .quiz-option {
   padding: 0.75rem 1rem;
   border-radius: 0.75rem;
-  border: 1px solid rgb(255 255 255 / 0.1);
-  background: rgb(255 255 255 / 0.05);
-  color: #e2e8f0;
   font-weight: 600;
   cursor: pointer;
-  transition: background 0.15s;
 }
-.quiz-option:hover:not(:disabled) { background: rgb(255 255 255 / 0.12); }
 .quiz-option:disabled { cursor: default; }
-.quiz-option.correct   { background: rgb(34 197 94 / 0.25); border-color: #22c55e; color: #bbf7d0; }
-.quiz-option.incorrect { background: rgb(244 63 94 / 0.25); border-color: #f43f5e; color: #fecdd3; }
+.quiz-option.correct   { background: #166534; border-color: #22c55e; color: #dcfce7; }
+.quiz-option.incorrect { background: #9f1239; border-color: #f43f5e; color: #ffe4e6; }
 
-/* ---------- Tarjeta de perro ---------- */
+/* =========================================================
+   TARJETA DE PERRO (azul oscuro)
+   ========================================================= */
 .dog-card {
   display: flex;
   flex-direction: column;
   align-items: center;
   overflow: hidden;
   border-radius: 1.25rem;
-  border: 1px solid rgb(255 255 255 / 0.1);
-  background: rgb(255 255 255 / 0.05);
+  border: 1px solid var(--glass-line);
+  background: linear-gradient(180deg, var(--navy-700) 0%, var(--navy-900) 100%);
   text-align: center;
+  box-shadow: var(--shadow-lg);
 }
 .dog-card img {
   display: block;
   width: 100%;
   height: 260px;
-  object-fit: cover;          /* llena la caja, recortando desde el centro */
+  object-fit: cover;
   object-position: center;
 }
 .dog-card-breed {
@@ -81,33 +322,44 @@
 .dog-card-actions a {
   padding: 0.4rem 0.8rem;
   border-radius: 0.6rem;
-  border: 1px solid rgb(255 255 255 / 0.12);
-  background: rgb(255 255 255 / 0.06);
-  color: #cbd5e1;
   font-size: 0.8rem;
   font-weight: 600;
   cursor: pointer;
-  transition: background 0.15s;
 }
-.dog-card-actions button:hover,
-.dog-card-actions a:hover { background: rgb(255 255 255 / 0.14); color: #fff; }
-.btn-fav { border-color: #45ff29  !important; color: #45ff29 !important; }
 
-/* ---------- Chips de razas e historial ---------- */
+/* ---------- Botón de favoritos ---------- */
+
+/* Agregar a favoritos: azul normal, verde al pasar el mouse */
+.dog-card-actions .btn-add:hover {
+  background: linear-gradient(135deg, #22a845, var(--btn-add-hover));
+  border-color: #7ee670;
+  box-shadow: 0 6px 18px rgb(34 168 69 / 0.55);
+}
+
+/* Quitar de favoritos: rojo fijo */
+.dog-card-actions .btn-fav {
+  background: linear-gradient(135deg, var(--btn-favorite-hover), var(--btn-favorite));
+  border: 2px solid #fca5a5;
+  color: #fff;
+  box-shadow: 0 4px 14px rgb(220 38 38 / 0.45);
+}
+.dog-card-actions .btn-fav:hover {
+  background: linear-gradient(135deg, #ef4444, var(--btn-favorite-hover));
+  box-shadow: 0 6px 18px rgb(239 68 68 / 0.6);
+}
+
+/* =========================================================
+   CHIPS DE RAZAS E HISTORIAL
+   ========================================================= */
 .breed-chip,
 .history-item {
   padding: 0.35rem 0.8rem;
   border-radius: 999px;
-  border: 1px solid rgb(255 255 255 / 0.1);
-  background: rgb(255 255 255 / 0.05);
-  color: #cbd5e1;
   font-size: 0.8rem;
+  font-weight: 600;
   cursor: pointer;
-  transition: background 0.15s;
 }
 .history-item { width: 100%; border-radius: 0.6rem; text-align: left; }
-.breed-chip:hover,
-.history-item:hover { background: rgb(255 255 255 / 0.14); color: #fff; }
 
 #generator-results .dog-card {
   width: 100%;

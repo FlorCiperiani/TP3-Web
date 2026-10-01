@@ -16,11 +16,11 @@ const MAX_HISTORY = 12;
 
 /* ESTADO */
 const state = {
-  breeds: {},            
-  folders: [],           
-  results: [],           
-  favorites: loadStorage(LS_FAVS),  
-  history: loadStorage(LS_HISTORY), 
+  breeds: {},
+  folders: [],
+  results: [],
+  favorites: loadStorage(LS_FAVS),
+  history: loadStorage(LS_HISTORY),
   gallery: { page: 0, limit: 12, breed: "", sub: "", all: [], random: true },
   quiz: { url: "", answer: "", answered: false, correct: 0, total: 0, streak: 0, best: Number(localStorage.getItem(LS_BEST_STREAK)) || 0 },
 };
@@ -245,10 +245,12 @@ function createDogCard(url) {
   const actions = document.createElement("div");
   actions.className = "dog-card-actions";
 
+  const fav = isFavorite(url);
   const btnFav = document.createElement("button");
   btnFav.type = "button";
-  btnFav.className = "btn-fav";
-  btnFav.textContent = isFavorite(url) ? "Quitar de favoritos" : "Agregar a favoritos";
+  btnFav.className = fav ? "btn-fav" : "btn-add";
+  btnFav.textContent = fav ? "💔 Quitar de favoritos" : "❤️ Agregar a favoritos";
+  btnFav.setAttribute("aria-pressed", String(fav));
   btnFav.addEventListener("click", () => toggleFavorite(url));
 
   const link = document.createElement("a");
@@ -312,12 +314,10 @@ function toggleFavorite(url) {
   else state.favorites.push(url);
   saveStorage(LS_FAVS, state.favorites);
   updateFavCount();
-  // Se redibuja todo lo que muestra botones de favorito
   renderResults();
   renderGallery();
   renderFavorites();
 }
-
 function updateFavCount() {
   $("fav-count").textContent = `(${state.favorites.length})`;
 }
